@@ -1,0 +1,138 @@
+/* Custom styles for equal height service cards */
+
+/* For Swiper sliders (index.html) */
+.feature-box-slider .swiper-wrapper {
+    align-items: stretch;
+}
+
+.feature-box-slider .swiper-slide {
+    height: auto;
+}
+
+/* For regular grid layouts (service.html) */
+.feature-section .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.feature-section .row>[class*="col-"] {
+    display: flex;
+}
+
+/* Common styles for all feature-box-items */
+.feature-box-items {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.feature-box-items p {
+    flex-grow: 1;
+}
+
+.feature-box-items .feature-info-box {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+/* ========================================== */
+/* Reason to Choose Us Cards - service-card-item */
+/* ========================================== */
+.service-section .row.advance-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.service-section .advance-item {
+    display: flex;
+}
+
+.service-card-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.service-card-item .content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.service-card-item .content p {
+    flex-grow: 1;
+}
+
+/* ========================================== */
+/* Contact Info Cards - contact-info-box */
+/* ========================================== */
+.contact-info-section .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.contact-info-section .row>[class*="col-"] {
+    display: flex;
+}
+
+.contact-info-box {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+.contact-info-box .content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.contact-info-box .content p {
+    flex-grow: 1;
+}
+
+/* ========================================== */
+/* Logo Adjustment */
+/* ========================================== */
+.logo {
+    margin-left: 20px;
+}
+
+/* ========================================== */
+/* Floating WhatsApp Button */
+/* ========================================== */
+.floating-whatsapp {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #25D366;
+    color: #FFF;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 9999;
+    /* Ensure it's on top */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.floating-whatsapp:hover {
+    background-color: #128C7E;
+    color: #FFF;
+    transform: scale(1.1);
+    box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.floating-whatsapp i {
+    margin-top: 2px;
+    /* Slight optical adjustment */
+}
