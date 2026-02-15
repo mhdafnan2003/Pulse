@@ -1,3 +1,29 @@
+/* Logo Size Adjustments - Force larger sizes */
+.header-1 .logo img.d-none.d-md-block,
+.header-1 .header-main .logo img.d-none.d-md-block {
+    max-width: 250px !important;
+    width: 250px !important;
+    height: auto !important;
+    min-width: 250px !important;
+}
+
+.header-1 .logo img.d-block.d-md-none,
+.header-1 .header-main .logo img.d-block.d-md-none {
+    height: 80px !important;
+    width: auto !important;
+    max-height: 80px !important;
+}
+
+
+/* Custom X (Twitter) Icon - Fallback for older Font Awesome versions */
+i.fa-brands.fa-x-twitter::before {
+    content: "X" !important;
+    font-family: Arial, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 1.1em !important;
+    font-style: normal !important;
+}
+
 /* Custom styles for equal height service cards */
 
 /* For Swiper sliders (index.html) */
@@ -108,13 +134,13 @@
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 60px;
-    height: 60px;
+    width: 75px;
+    height: 75px;
     background-color: #25D366;
     color: #FFF;
     border-radius: 50%;
     text-align: center;
-    font-size: 30px;
+    font-size: 40px;
     box-shadow: 2px 2px 3px #999;
     z-index: 9999;
     /* Ensure it's on top */
@@ -135,4 +161,602 @@
 .floating-whatsapp i {
     margin-top: 2px;
     /* Slight optical adjustment */
+}
+
+/* Hide mobile-only buttons on desktop */
+.hero-button-group-mobile {
+    display: none;
+}
+
+/* ========================================== */
+/* Contact Form Modal Popup */
+/* ========================================== */
+.white-popup-block {
+    background-image: url('../img/inner-page/one.png');
+    background-size: cover;
+    background-position: center;
+    padding: 50px;
+    text-align: left;
+    max-width: 700px;
+    margin: 40px auto;
+    position: relative;
+    border-radius: 10px;
+}
+
+.white-popup-block .contact-box-items {
+    background: transparent;
+}
+
+.white-popup-block .section-title {
+    margin-bottom: 30px;
+}
+
+.white-popup-block .sub-title {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.white-popup-block .sub-title img {
+    width: 20px;
+    height: 20px;
+}
+
+.white-popup-block h2 {
+    color: #fff !important;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Form field styling: User input is black, others are white/previous style */
+.white-popup-block .contact-form-box .form-clt input,
+.white-popup-block .contact-form-box .form-clt textarea {
+    outline: none;
+    width: 100%;
+    color: #000;
+    /* User input text is black */
+    padding-bottom: 20px;
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: capitalize;
+}
+
+.white-popup-block .contact-form-box .form-clt input::placeholder,
+.white-popup-block .contact-form-box .form-clt textarea::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    /* Revert placeholder to white-ish */
+}
+
+.white-popup-block .contact-form-box .form-clt textarea {
+    padding-bottom: 120px;
+}
+
+.white-popup-block .contact-form-box .form-clt .form .single-select {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: transparent;
+    width: 100%;
+    height: initial;
+    line-height: initial;
+    text-transform: capitalize;
+    color: #fff;
+    padding-bottom: 20px;
+    border-radius: 0;
+}
+
+.white-popup-block .contact-form-box .form-clt .form .single-select .current {
+    color: #000;
+    /* Selected text is black */
+}
+
+.white-popup-block .contact-form-box .form-clt .form .single-select::after {
+    border-bottom: 2px solid #fff;
+    border-right: 2px solid #fff;
+}
+
+.white-popup-block .contact-form-box .form-clt .form .nice-select .list {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.white-popup-block .contact-form-box .form-clt .form .nice-select .option {
+    color: #fff;
+}
+
+.white-popup-block .contact-form-box .form-clt .form .nice-select .option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 767px) {
+    .white-popup-block {
+        padding: 30px 20px;
+        margin: 20px;
+    }
+
+    .white-popup-block h2 {
+        font-size: 28px;
+    }
+}
+
+.mfp-fade.mfp-bg {
+    opacity: 0;
+    transition: all 0.3s ease-out;
+}
+
+.mfp-fade.mfp-bg.mfp-ready {
+    opacity: 0.8;
+}
+
+.mfp-fade.mfp-bg.mfp-removing {
+    opacity: 0;
+}
+
+.mfp-fade.mfp-wrap .mfp-content {
+    opacity: 0;
+    transition: all 0.3s ease-out;
+}
+
+.mfp-fade.mfp-wrap.mfp-ready .mfp-content {
+    opacity: 1;
+}
+
+.mfp-fade.mfp-wrap.mfp-removing .mfp-content {
+    opacity: 0;
+}
+
+/* ========================================== */
+/* Service Slider Navigation (Global) */
+/* ========================================== */
+.feature-section .feature-wrapper {
+    position: relative;
+}
+
+.feature-section .array-button {
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    right: -20px;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% + 40px);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.feature-section .array-button button {
+    pointer-events: all;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.feature-section .array-button button:hover {
+    background: #F7931E;
+    color: #fff;
+    border-color: #F7931E;
+}
+
+.feature-section .array-button button i {
+    font-size: 18px;
+}
+
+.feature-section .array-button .swiper-dot {
+    display: none;
+}
+
+/* ========================================== */
+/* Mobile Responsive Enhancements */
+/* ========================================== */
+
+/* Tablet and below */
+@media (max-width: 991px) {
+    .logo {
+        margin-left: 10px;
+    }
+
+    .floating-whatsapp {
+        bottom: 20px;
+        right: 20px;
+        width: 70px;
+        height: 70px;
+        font-size: 35px;
+    }
+}
+
+/* Mobile landscape and below */
+@media (max-width: 767px) {
+
+    /* Logo adjustments */
+    .logo {
+        margin-left: 5px;
+    }
+
+    /* Floating WhatsApp button */
+    .floating-whatsapp {
+        bottom: 15px;
+        right: 15px;
+        width: 65px;
+        height: 65px;
+        font-size: 32px;
+    }
+
+    /* Hide desktop buttons on mobile */
+    .hero-button-group {
+        display: none !important;
+    }
+
+    /* Show and style mobile-only buttons */
+    .hero-button-group-mobile {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+        margin-top: 30px;
+    }
+
+    .mobile-icon-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-icon-btn i {
+        font-size: 26px;
+        color: #fff;
+    }
+
+    .mobile-icon-btn.whatsapp-btn {
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    }
+
+    .mobile-icon-btn.contact-btn {
+        background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    }
+
+    .mobile-icon-btn:hover,
+    .mobile-icon-btn:active {
+        transform: scale(1.2);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modal adjustments already handled above */
+
+    /* Typography scaling */
+    .section-title h2 {
+        font-size: 28px !important;
+    }
+
+    .section-title h6 {
+        font-size: 14px !important;
+    }
+
+    /* Card spacing - reduced for mobile */
+    .feature-box-items,
+    .service-card-item,
+    .contact-info-box {
+        margin-bottom: 15px !important;
+    }
+
+    .service-section .advance-item {
+        margin-bottom: 15px !important;
+    }
+
+    /* Reduce row gap */
+    .service-section .row.advance-wrap {
+        row-gap: 15px !important;
+    }
+
+    /* Reposition slider arrows to sides on mobile - centered on cards */
+    .feature-section .section-title-area {
+        position: static;
+    }
+
+    .feature-section .feature-wrapper {
+        position: relative;
+    }
+
+    .feature-section .array-button {
+        position: absolute !important;
+        top: 50% !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: translateY(-50%) !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        pointer-events: none;
+        z-index: 10;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .feature-section .array-button .swiper-dot {
+        display: none !important;
+    }
+
+    .feature-section .array-button button {
+        pointer-events: all;
+        width: 45px !important;
+        height: 45px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 2px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .feature-section .array-button .array-prev {
+        margin-left: 0 !important;
+    }
+
+    .feature-section .array-button .array-next {
+        margin-right: 0 !important;
+    }
+
+    .feature-section .array-button button i {
+        font-size: 18px !important;
+        color: #333 !important;
+    }
+
+    /* Testimonial slider arrows on sides for mobile */
+    .testimonial-warpper {
+        position: relative;
+    }
+
+    .testimonial-warpper .array-button {
+        position: absolute !important;
+        top: 50% !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: translateY(-50%) !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        pointer-events: none;
+        z-index: 10;
+        margin-top: 0 !important;
+    }
+
+    .testimonial-warpper .array-button button {
+        pointer-events: all;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .testimonial-warpper .array-button .array-prev {
+        margin-left: 0 !important;
+    }
+
+    .testimonial-warpper .array-button .array-next {
+        margin-right: 0 !important;
+    }
+
+    .testimonial-warpper .array-button button i {
+        font-size: 16px !important;
+        color: #333 !important;
+    }
+
+    /* Contact section adjustments */
+    .contact-wrapper .contact-box-items {
+        padding: 30px 20px;
+    }
+
+    .contact-wrapper .contact-box-items h2 {
+        font-size: 28px !important;
+    }
+
+    /* Service card mobile enhancements */
+    .feature-box-items .feature-info-box {
+        display: none !important;
+    }
+
+    .feature-box-items {
+        position: relative;
+        cursor: pointer;
+    }
+
+    /* Make entire card clickable by expanding the heading link on mobile */
+    .feature-box-items h3 a::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+}
+
+/* Mobile portrait */
+@media (max-width: 575px) {
+
+    /* Logo further adjustment */
+    .logo {
+        margin-left: 0;
+    }
+
+    /* Floating WhatsApp */
+    .floating-whatsapp {
+        bottom: 10px;
+        right: 10px;
+        width: 60px;
+        height: 60px;
+        font-size: 30px;
+    }
+
+    /* Modal popup */
+    .white-popup-block {
+        padding: 20px 15px;
+        margin: 10px;
+    }
+
+    .white-popup-block h2 {
+        font-size: 24px !important;
+    }
+
+    .white-popup-block .sub-title {
+        font-size: 14px;
+    }
+
+    /* Typography */
+    .section-title h2 {
+        font-size: 24px !important;
+        line-height: 1.3;
+    }
+
+    .section-title h6 {
+        font-size: 13px !important;
+    }
+
+    /* Hero section */
+    .hero-content h1 {
+        font-size: 32px !important;
+        line-height: 1.2 !important;
+    }
+
+    .hero-content p {
+        font-size: 15px !important;
+    }
+
+    /* Service cards */
+    .feature-box-items h3 {
+        font-size: 22px !important;
+    }
+
+    .feature-box-items h6 {
+        font-size: 16px !important;
+    }
+
+    /* Contact form */
+    .contact-wrapper .contact-box-items {
+        padding: 25px 15px;
+    }
+
+    .contact-wrapper .contact-box-items h2 {
+        font-size: 24px !important;
+    }
+
+    /* Button sizing */
+    .theme-btn {
+        padding: 12px 25px !important;
+        font-size: 14px !important;
+    }
+
+    /* Form fields */
+    .contact-form-box .form-clt input,
+    .contact-form-box .form-clt textarea {
+        font-size: 14px;
+    }
+
+    /* Footer adjustments */
+    .footer-widget-items {
+        margin-bottom: 30px;
+    }
+
+    .footer-bottom-wrapper {
+        text-align: center;
+    }
+}
+
+/* Very small mobile devices */
+@media (max-width: 375px) {
+    .white-popup-block {
+        padding: 15px 10px;
+        margin: 5px;
+    }
+
+    .white-popup-block h2 {
+        font-size: 20px !important;
+    }
+
+    .hero-content h1 {
+        font-size: 28px !important;
+    }
+
+    .section-title h2 {
+        font-size: 22px !important;
+    }
+
+    .floating-whatsapp {
+        width: 55px;
+        height: 55px;
+        font-size: 30px;
+        bottom: 8px;
+        right: 8px;
+    }
+
+    .theme-btn {
+        padding: 10px 20px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* Landscape orientation fix for mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .white-popup-block {
+        max-height: 90vh;
+        overflow-y: auto;
+        margin: 10px auto;
+    }
+
+    .hero-section {
+        min-height: auto;
+        padding: 60px 0;
+    }
+}
+
+/* Ensure images are responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Responsive container adjustments */
+@media (max-width: 767px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+/* Fix overflow issues on mobile */
+body {
+    overflow-x: hidden;
+}
+
+.page-wrapper {
+    overflow-x: hidden;
 }

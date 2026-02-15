@@ -120,7 +120,9 @@
                         <div class="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                             <div class="offcanvas__logo">
                                 <a href="index.html">
-                                    <img src="assets/img/logo/logo.png" alt="logo-img">
+                                    <img src="assets/img/logo new.png" alt="logo-img" class="d-none d-md-block">
+                                    <img src="assets/img/logo mob.png" alt="logo-img" class="d-block d-md-none"
+                                        >
                                 </a>
                             </div>
                             <div class="offcanvas__close">
@@ -186,7 +188,7 @@
                             </a>
                             <div class="social-icon d-flex align-items-center">
                                 <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
                                 <a href="#"><i class="fab fa-youtube"></i></a>
                                 <a href="#"><i class="fab fa-linkedin-in"></i></a>
                             </div>
@@ -203,8 +205,9 @@
                 <div class="mega-menu-wrapper">
                     <div class="header-main">
                         <a href="index.html" class="logo">
-                            <img src="assets/img/logo/logonew.png" alt="img" class="d-none d-md-block">
-                            <img src="assets/img/favicon.png" alt="img" class="d-block d-md-none" style="height: 40px;">
+                            <img src="assets/img/logo new.png" alt="img" class="d-none d-md-block">
+                            <img src="assets/img/logo mob.png" alt="img" class="d-block d-md-none"
+                                >
                         </a>
                         <div class="mean__menu-wrapper">
                             <div class="main-menu">
@@ -261,7 +264,7 @@
                             <a href="#" class="main-header__search search-toggler d-xxl-none">
                                 <i class="fa-regular fa-magnifying-glass"></i>
                             </a>
-                            <a href="tel:+86661233562" class="theme-btn d-none d-xxl-block">
+                            <a href="tel:+447956273533" class="theme-btn d-none d-xxl-block">
                                 <div class="btn_inner">
                                     <div class="btn_icon">
                                         <span>
@@ -345,7 +348,7 @@
                                     <div class="content">
                                         <h4>Our address</h4>
                                         <p>Pulse Creative & Consulting Ltd
-                                            33 Denzil Avenue, Southampton, England, SO14 0LP, UK
+                                            Mirror Works, 12 Marshgate Lane, London, E15 2NH.
                                         </p>
                                     </div>
                                 </div>
@@ -394,7 +397,7 @@
                                 <div class="col-lg-6">
                                     <div class="contact-map">
                                         <iframe
-                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6678.7619084840835!2d144.9618311901502!3d-37.81450084255415!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642b4758afc1d%3A0x3119cc820fdfc62e!2sEnvato!5e0!3m2!1sen!2sbd!4v1641984054261!5m2!1sen!2sbd"
+                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2481.8739425876374!2d-0.013833!3d51.5325642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761d3d6c2075e3%3A0xf9b0869c93d3250e!2sWorkspace%C2%AE%20%7C%20Mirror%20Works!5e0!3m2!1sen!2suk!4v1709000000000!5m2!1sen!2suk"
                                             style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 
                                     </div>
@@ -402,39 +405,47 @@
                                 <div class="col-lg-6">
                                     <div class="contact-box-items">
                                         <h2 class="text-anim">Send Us A Message.</h2>
-                                        <form action="contact.php" id="contact-form" class="contact-form-box">
+                                        <form id="contact-form" class="contact-form-box"
+                                            onsubmit="return sendContactToWhatsApp(event)">
                                             <div class="row g-4 align-items-center">
                                                 <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
                                                     <div class="form-clt">
-                                                        <input type="text" placeholder="Full name *">
+                                                        <input type="text" id="contact-name" name="name"
+                                                            placeholder="Full name *" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
                                                     <div class="form-clt">
-                                                        <input type="text" placeholder="Email address *">
+                                                        <input type="email" id="contact-email" name="email"
+                                                            placeholder="Email address *" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
                                                     <div class="form-clt">
-                                                        <input type="text" placeholder="Phone number *">
+                                                        <input type="tel" id="contact-phone" name="phone"
+                                                            placeholder="Phone number *" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".5s">
                                                     <div class="form-clt">
                                                         <div class="form">
-                                                            <select class="single-select w-100">
-                                                                <option>Chose a option</option>
-                                                                <option>Digital Marketing</option>
-                                                                <option>Software & IT Service</option>
-                                                                <option>Finance & Investment</option>
+                                                            <select class="single-select w-100" id="contact-service"
+                                                                name="service">
+                                                                <option>Choose an option</option>
+                                                                <option>Student Visas</option>
+                                                                <option>Work Visas</option>
+                                                                <option>Visit Visas</option>
+                                                                <option>International Work</option>
+                                                                <option>Career Support</option>
+                                                                <option>Legal & Compliance</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 wow fadeInUp" data-wow-delay=".3s">
                                                     <div class="form-clt">
-                                                        <textarea name="message"
-                                                            placeholder="Type your message"></textarea>
+                                                        <textarea id="contact-message" name="message"
+                                                            placeholder="Type your message" required></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-12 wow fadeInUp" data-wow-delay=".5s">
@@ -443,18 +454,44 @@
                                                         <span class="btn_inner">
                                                             <span class="btn_icon">
                                                                 <span>
-                                                                    <i class="fa-solid fa-arrow-up-right"></i>
-                                                                    <i class="fa-solid fa-arrow-up-right"></i>
+                                                                    <i class="fa-brands fa-whatsapp"></i>
+                                                                    <i class="fa-brands fa-whatsapp"></i>
                                                                 </span>
                                                             </span>
                                                             <span class="btn_text">
-                                                                <span>Send now</span>
+                                                                <span>Send to WhatsApp</span>
                                                             </span>
                                                         </span>
                                                     </button>
                                                 </div>
                                             </div>
                                         </form>
+                                        <script>
+                                            function sendContactToWhatsApp(event) {
+                                                event.preventDefault();
+
+                                                const name = document.getElementById('contact-name').value;
+                                                const email = document.getElementById('contact-email').value;
+                                                const phone = document.getElementById('contact-phone').value;
+                                                const service = document.getElementById('contact-service').value;
+                                                const message = document.getElementById('contact-message').value;
+
+                                                let whatsappMessage = `*New Inquiry from Website*%0A%0A`;
+                                                whatsappMessage += `*Name:* ${encodeURIComponent(name)}%0A`;
+                                                whatsappMessage += `*Email:* ${encodeURIComponent(email)}%0A`;
+                                                whatsappMessage += `*Phone:* ${encodeURIComponent(phone)}%0A`;
+                                                whatsappMessage += `*Service Interested:* ${encodeURIComponent(service)}%0A%0A`;
+                                                whatsappMessage += `*Message:*%0A${encodeURIComponent(message)}`;
+
+                                                const whatsappNumber = '447956273533';
+                                                const whatsappURL = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
+                                                window.open(whatsappURL, '_blank');
+                                                document.getElementById('contact-form').reset();
+
+                                                return false;
+                                            }
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -462,7 +499,7 @@
                     </div>
                 </section>
 
-                <!-- Cta Newsletter Section Start -->
+                <!-- Cta Newsletter Section Start
                 <section class="cta-newsletter-section bg-cover"
                     style="background-image: url('assets/img/home-1/cta-newsletter.jpg');">
                     <div class="container">
@@ -484,6 +521,7 @@
                         </div>
                     </div>
                 </section>
+                -->
 
                 <!-- Footer Section Start -->
                 <footer class="footer-section">
@@ -495,7 +533,7 @@
                                         <div class="footer-widget-items">
                                             <div class="widget-head">
                                                 <a href="index.html" class="footer-logo">
-                                                    <img src="assets/img/logo/logonew.png" alt="img">
+                                                    <img src="assets/img/logo new.png" alt="img">
                                                 </a>
                                             </div>
                                             <div class="footer-content">
@@ -561,26 +599,26 @@
                                                 </li>
                                                 <li>
                                                     <a href="service.html">
-                                                        Healthcare Visas </a>
+                                                        Work Visas </a>
                                                 </li>
                                                 <li>
                                                     <a href="service.html">
-                                                        Technical Visas
+                                                        Visit Visas
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="service.html">
-                                                        Legal Compliance
+                                                        International Work
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="service.html">
-                                                        Application Support
+                                                        Career Support
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="service.html">
-                                                        Career Advisory
+                                                        Legal & Compliance
                                                     </a>
                                                 </li>
                                             </ul>
@@ -593,8 +631,8 @@
                                             </div>
                                             <ul class="contact-list">
                                                 <li>
-                                                    33 Denzil Avenue <br>
-                                                    Southampton, England, SO14 0LP, UK
+                                                    Mirror Works, 12 Marshgate Lane <br>
+                                                    London, E15 2NH.
                                                 </li>
                                                 <li>
                                                     <a href="tel:+447956273533">+44 7956 273533</a>
@@ -620,17 +658,17 @@
                                     <div class="social-icon d-flex align-items-center wow fadeInUp"
                                         data-wow-delay=".5s">
                                         <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                        <a href="#"><i class="fab fa-twitter"></i></a>
+                                        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
                                         <a href="#"><i class="fab fa-vimeo-v"></i></a>
                                         <a href="#"><i class="fab fa-pinterest-p"></i></a>
                                     </div>
                                     <ul class="footer-list wow fadeInUp" data-wow-delay=".7s">
                                         <li>
-                                            <a href="contact.html">Privacy policy</a>
+                                            <a href="privacy-policy.html">Privacy policy</a>
                                         </li>
                                         <li>।</li>
                                         <li>
-                                            <a href="contact.html">Terms & conditions</a>
+                                            <a href="terms-conditions.html">Terms & conditions</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -697,3 +735,14 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
