@@ -1,0 +1,13 @@
+{
+  "name": "pulse-mern",
+  "version": "1.0.0",
+  "description": "Pulse Creative & Consulting – MERN Stack Application",
+  "private": true,
+  "scripts": {
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "start cmd /k \"cd server && npm run dev\" && start cmd /k \"cd client && npm run dev\"",
+    "seed": "cd server && npm run seed",
+    "install:all": "cd server && npm install && cd ../client && npm install"
+  }
+}

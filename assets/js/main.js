@@ -207,6 +207,34 @@
         });
 
         /* ================================
+          Hero Banner Slider Js Start
+        ================================ */
+
+        if ($('.hero-banner-slider').length > 0) {
+            const isMobile = window.innerWidth <= 991;
+            const heroBannerSlider = new Swiper(".hero-banner-slider", {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                effect: isMobile ? "slide" : "fade",
+                fadeEffect: {
+                    crossFade: true,
+                },
+                speed: 1200,
+                loop: true,
+                grabCursor: true,
+                touchRatio: 1,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: ".hero-banner-pagination",
+                    clickable: true,
+                },
+            });
+        }
+
+        /* ================================
           Brand Slider Js Start
         ================================ */
 

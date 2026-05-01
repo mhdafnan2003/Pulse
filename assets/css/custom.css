@@ -1,17 +1,12 @@
 /* Logo Size Adjustments - Force larger sizes */
 .header-1 .logo img.d-none.d-md-block,
-.header-1 .header-main .logo img.d-none.d-md-block {
-    max-width: 250px !important;
-    width: 250px !important;
-    height: auto !important;
-    min-width: 250px !important;
-}
-
+.header-1 .header-main .logo img.d-none.d-md-block,
 .header-1 .logo img.d-block.d-md-none,
 .header-1 .header-main .logo img.d-block.d-md-none {
-    height: 80px !important;
+    max-width: 250px !important;
     width: auto !important;
-    max-height: 80px !important;
+    height: auto !important;
+    min-width: 0 !important;
 }
 
 
@@ -33,6 +28,16 @@ i.fa-brands.fa-x-twitter::before {
 
 .feature-box-slider .swiper-slide {
     height: auto;
+}
+
+/* Give the swiper overflow room so card bottom border-radius isn't clipped */
+.feature-box-slider.swiper {
+    overflow: visible;
+}
+
+/* Override .fix overflow:hidden on the feature section so card corners aren't clipped */
+.feature-section.fix {
+    overflow: visible;
 }
 
 /* For regular grid layouts (service.html) */
@@ -89,6 +94,15 @@ i.fa-brands.fa-x-twitter::before {
 
 .service-card-item .content p {
     flex-grow: 1;
+}
+
+/* ========================================== */
+/* Contact info cards - spacing on small screens */
+/* ========================================== */
+@media (max-width: 991px) {
+    .contact-info-section .contact-info-box {
+        margin-bottom: 20px;
+    }
 }
 
 /* ========================================== */
@@ -166,6 +180,231 @@ i.fa-brands.fa-x-twitter::before {
 /* Hide mobile-only buttons on desktop */
 .hero-button-group-mobile {
     display: none;
+}
+
+/* ========================================== */
+/* Hero Banner Carousel */
+/* ========================================== */
+.hero-slider-section {
+    position: relative;
+    overflow: hidden;
+    padding: 120px 0 90px;
+}
+
+.hero-banner-slider {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.hero-banner-slider .swiper-wrapper {
+    align-items: stretch;
+}
+
+.hero-banner-slider .swiper-slide {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(680px, 100vh, 950px);
+    padding: 120px 0 92px; /* reduced top padding to remove visual gap under header */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hero-slide-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    min-height: inherit;
+    padding-top: 64px;
+}
+
+.hero-slide-content {
+    max-width: 660px;
+    color: #fff;
+}
+
+.hero-slide-content p,
+.hero-slide-content h1 {
+    color: #fff;
+}
+
+.hero-slide-content .hero-button-group {
+    margin-top: 28px;
+}
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.hero-button-group-mobile {
+    margin-top: 22px;
+}
+
+.hero-banner-pagination {
+    position: absolute;
+    left: 50% !important;
+    bottom: 26px !important;
+    width: auto !important;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+.hero-banner-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    margin: 0 6px !important;
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.45);
+    transition: all 0.3s ease;
+}
+
+.hero-banner-pagination .swiper-pagination-bullet-active {
+    width: 28px;
+    border-radius: 999px;
+    background: #fff;
+}
+
+@media (max-width: 991px) {
+    .hero-slider-section {
+        padding: 100px 0 72px;
+    }
+
+    .hero-banner-slider .swiper-slide {
+        min-height: auto;
+        padding: 36px 0 78px;
+    }
+
+    .hero-slide-inner {
+        min-height: auto;
+        padding-top: 36px;
+    }
+
+    .hero-slide-content {
+        max-width: 100%;
+        padding-top: 20px; /* breathing room above title text on tablets */
+    }
+
+    .hero-slide-content h1 {
+        font-size: 44px;
+        line-height: 1.05;
+        margin-top: -24px !important;
+    }
+
+    .hero-slide-content p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 575px) {
+    .hero-slider-section {
+        padding: 92px 0 68px;
+    }
+
+    .hero-slide-content {
+        padding-top: 28px; /* extra space above title on small phones */
+    }
+
+    .hero-banner-pagination {
+        bottom: 12px !important;
+    }
+}
+
+/* ========================================== */
+/* Offcanvas sidebar mobile nav styling
+   Replicates meanmenu .mean-container .mean-nav output */
+/* ========================================== */
+.mobile-menu .mean-container .mean-nav {
+    background: transparent;
+    margin-top: 0;
+    float: none;
+    width: 100%;
+}
+
+.mobile-menu .mean-container .mean-nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    width: 100%;
+}
+
+.mobile-menu .mean-container .mean-nav ul li {
+    float: left;
+    width: 100%;
+    position: relative;
+}
+
+.mobile-menu .mean-container .mean-nav ul li a {
+    display: block;
+    float: left;
+    width: 100%;
+    padding: 10px 0;
+    color: var(--header);
+    font-size: 16px;
+    line-height: 2;
+    font-weight: 500;
+    text-transform: capitalize;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    border-top: none;
+    text-decoration: none;
+    font-family: "Inter", sans-serif;
+    transition: color 0.3s ease;
+}
+
+.mobile-menu .mean-container .mean-nav ul li:first-child > a {
+    border-top: none;
+}
+
+.mobile-menu .mean-container .mean-nav ul li.mean-last > a {
+    border-bottom: none;
+}
+
+.mobile-menu .mean-container .mean-nav ul li a:hover,
+.mobile-menu .mean-container .mean-nav ul li a.active {
+    color: var(--theme);
+}
+
+/* ========================================== */
+/* Reduce gap between hero slider and Reason to Choose Us */
+/* ========================================== */
+.service-section.section-padding {
+    padding-top: 60px;
+}
+
+@media (max-width: 991px) {
+    .service-section.section-padding {
+        padding-top: 40px;
+    }
+}
+
+@media (max-width: 575px) {
+    .service-section.section-padding {
+        padding-top: 30px;
+    }
+}
+
+/* ========================================== */
+/* Reduce gap between 6 services and testimonials */
+/* ========================================== */
+.testimonial-section.section-padding {
+    padding-top: 40px;
+}
+
+@media (max-width: 991px) {
+    .testimonial-section.section-padding {
+        padding-top: 30px;
+    }
 }
 
 /* ========================================== */
@@ -363,6 +602,14 @@ i.fa-brands.fa-x-twitter::before {
 /* ========================================== */
 /* Mobile Responsive Enhancements */
 /* ========================================== */
+
+/* Hide the desktop nav links inside the header on small screens —
+   they are already cloned into the offcanvas sidebar by meanmenu */
+@media (max-width: 1199px) {
+    .mean__menu-wrapper .main-menu {
+        display: none !important;
+    }
+}
 
 /* Tablet and below */
 @media (max-width: 991px) {
@@ -759,4 +1006,168 @@ body {
 
 .page-wrapper {
     overflow-x: hidden;
+}
+
+/* ========================================== */
+/* Transparent Navbar Over Hero - Only when not sticky */
+/* ========================================== */
+.header-1:not(.sticky) {
+    background-color: transparent !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.header-1:not(.sticky) .header-main {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* Force navbar links to be white only when not sticky (over dark slider) */
+.header-1:not(.sticky) .main-menu ul li a,
+.header-1:not(.sticky) .main-header__search,
+.header-1:not(.sticky) .sidebar__toggle,
+.header-1:not(.sticky) .main-header__search i,
+.header-1:not(.sticky) .sidebar__toggle i {
+    color: #ffffff !important;
+}
+
+.header-1:not(.sticky) .main-menu ul li a:hover {
+    color: var(--theme) !important;
+}
+
+/* Apply inversion to logo only when not sticky - REMOVED AS IT CAUSED WHITE OVERLAP */
+.header-1:not(.sticky) .logo img {
+    filter: none !important;
+}
+
+
+/* Ensure the pill-shaped menu wrapper also looks consistent when not sticky */
+.header-1:not(.sticky) .mean__menu-wrapper {
+    background: rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: none !important;
+    border-radius: 70px !important;
+}
+
+
+.hero-slider-section {
+    padding: 0 !important; /* Hero section starts from the very top */
+    margin-top: 0 !important;
+}
+
+/* Ensure header overlays the hero and the image begins at the very top */
+.header-1 {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+    background: transparent !important;
+}
+
+/* When header becomes sticky, make it fixed and restore its background */
+.sticky.header-1 {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 10000 !important;
+    background-color: var(--header) !important;
+    box-shadow: rgba(0,0,0,0.08) 0 6px 20px !important;
+}
+
+/* Let the slide background reach the top while keeping content below header */
+.hero-banner-slider .swiper-slide {
+    padding-top: 0 !important;
+}
+
+.hero-slide-inner {
+    padding-top: 160px !important; /* push content down clear of the header */
+}
+
+/* Responsive chrome assets */
+.offcanvas__logo img.d-none.d-md-block,
+.offcanvas__logo img.d-block.d-md-none,
+.color-palate .palate-logo img,
+.footer-logo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.offcanvas__logo img.d-none.d-md-block,
+.color-palate .palate-logo img,
+.footer-logo img {
+    width: 200px;
+}
+
+.offcanvas__logo img.d-block.d-md-none {
+    width: auto;
+    height: 60px;
+}
+
+@media (max-width: 767px) {
+    .offcanvas__logo img.d-none.d-md-block,
+    .color-palate .palate-logo img,
+    .footer-logo img {
+        width: 170px;
+    }
+
+    .contact-wrapper .contact-map iframe {
+        height: 320px;
+    }
+
+    .about-content .section-title h2,
+    .breadcrumb-sub-title h1,
+    .section-title h2,
+    .hero-content h1 {
+        word-break: break-word;
+        hyphens: auto;
+    }
+
+    .about-content .about-description p {
+        font-size: 15px !important;
+        line-height: 1.7 !important;
+    }
+}
+
+/* Adjust mobile padding for the header */
+@media (max-width: 991px) {
+    .header-1 {
+        padding-top: 10px;
+    }
+}
+
+/* Small-screen adjustments: keep header overlaying the hero so the sliding
+   image fills from the very top on all screen sizes. */
+@media (max-width: 991px) {
+    /* Keep header absolutely positioned over the hero on mobile too */
+    .header-1 {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        z-index: 9999 !important;
+        background: transparent !important;
+    }
+
+    .header-1:not(.sticky) .mean__menu-wrapper {
+        background: transparent !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        gap: 12px;
+    }
+
+    /* Hero image starts from top; push slide content below the mobile navbar (~70px) */
+    .hero-banner-slider .swiper-slide {
+        padding-top: 0 !important;
+        padding-bottom: 60px !important;
+    }
+
+    .hero-slide-inner {
+        padding-top: 90px !important;
+    }
 }
