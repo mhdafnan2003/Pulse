@@ -96,6 +96,160 @@ i.fa-brands.fa-x-twitter::before {
     flex-grow: 1;
 }
 
+/* Reason Cards Slider */
+.reason-slider-wrapper {
+    position: relative;
+    padding-top: 20px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Hide Swiper's default navigation buttons */
+.reason-card-slider .swiper-button-next,
+.reason-card-slider .swiper-button-prev {
+    display: none !important;
+}
+
+.reason-slider-wrapper .container,
+.reason-slider-wrapper .row {
+    overflow: visible;
+}
+
+.reason-slider-wrapper .array-button {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    pointer-events: none;
+    z-index: 10;
+    padding: 0 15px;
+}
+
+.reason-slider-wrapper .array-button button {
+    pointer-events: all;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.reason-slider-wrapper .array-button button:hover {
+    background: #F7931E;
+    color: #fff;
+    border-color: #F7931E;
+}
+
+.reason-slider-wrapper .array-button button i {
+    font-size: 18px;
+}
+
+.reason-slider-wrapper .array-button .swiper-dot {
+    display: none;
+}
+
+.reason-card-slider {
+    padding: 20px 10px 50px !important;
+    overflow: visible !important;
+}
+
+.reason-card-slider .service-card-item {
+    min-height: 280px;
+    width: 100%;
+}
+
+.reason-card-slider .swiper-slide {
+    height: auto;
+    display: flex;
+}
+
+/* Center slides on mobile */
+@media (max-width: 575px) {
+    .reason-card-slider.swiper-centered .swiper-slide {
+        justify-content: center;
+    }
+    
+    .feature-box-slider.swiper-centered .swiper-slide {
+        justify-content: center;
+    }
+}
+
+/* Reason Slider Responsive */
+@media (max-width: 1199px) {
+    .reason-card-slider .service-card-item {
+        min-height: 260px;
+    }
+}
+
+@media (max-width: 991px) {
+    .reason-card-slider .service-card-item {
+        min-height: 240px;
+    }
+    
+    .reason-slider-wrapper .array-button button {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .reason-slider-wrapper .array-button button i {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 767px) {
+    .reason-card-slider .service-card-item {
+        min-height: 220px;
+    }
+    
+    .reason-slider-wrapper .array-button {
+        padding: 0 10px;
+    }
+    
+    .reason-slider-wrapper .array-button button {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .reason-slider-wrapper .array-button button i {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 575px) {
+    .reason-card-slider .service-card-item {
+        min-height: 200px;
+    }
+    
+    .reason-card-slider {
+        padding: 15px 5px 40px !important;
+    }
+    
+    .reason-slider-wrapper .array-button {
+        padding: 0 5px;
+    }
+    
+    .reason-slider-wrapper .array-button button {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .reason-slider-wrapper .array-button button i {
+        font-size: 12px;
+    }
+}
+
 /* ========================================== */
 /* Contact info cards - spacing on small screens */
 /* ========================================== */
@@ -645,21 +799,81 @@ i.fa-brands.fa-x-twitter::before {
 
     /* Hide desktop buttons on mobile */
     .hero-button-group {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0px;
+        width: 100%;
+        align-items: center;
+    }
+
+    .hero-button-group .theme-btn {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+        padding: 6px 16px !important;
+        font-size: 13px !important;
+        margin-top: 0 !important;
+    }
+
+    .hero-button-group .theme-btn .btn_icon {
         display: none !important;
+    }
+
+    .hero-button-group .theme-btn .btn_inner {
+        padding: 10px 16px !important;
+        text-align: center;
+    }
+
+    .hero-button-group .theme-btn .btn_inner::before {
+        display: none !important;
+    }
+
+    .hero-button-group .theme-btn {
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.45) !important;
+    }
+
+    .hero-button-group .theme-btn:first-child {
+        background: var(--theme) !important;
+        border-color: transparent !important;
+    }
+
+    .hero-button-group .theme-btn:first-child:hover {
+        background: transparent !important;
+        border-color: rgba(255, 255, 255, 0.45) !important;
+    }
+
+    .hero-button-group .theme-btn:first-child:hover + .theme-btn {
+        background: var(--theme) !important;
+        border-color: transparent !important;
+    }
+
+    .hero-button-group .theme-btn:last-child:hover {
+        background: var(--theme) !important;
+        border-color: transparent !important;
+    }
+
+    .hero-button-group:has(.theme-btn:last-child:hover) .theme-btn:first-child {
+        background: transparent !important;
+        border-color: rgba(255, 255, 255, 0.45) !important;
+    }
+
+    .service-section .section-title h2 .title-highlight {
+        display: block;
     }
 
     /* Show and style mobile-only buttons */
     .hero-button-group-mobile {
-        display: flex !important;
-        justify-content: center;
-        align-items: center;
-        gap: 25px;
-        margin-top: 30px;
+        display: none !important;
+    }
+
+    .hero-slide-content {
+        padding-top: 150px;
     }
 
     .mobile-icon-btn {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -670,7 +884,7 @@ i.fa-brands.fa-x-twitter::before {
     }
 
     .mobile-icon-btn i {
-        font-size: 26px;
+        font-size: 20px;
         color: #fff;
     }
 
@@ -684,7 +898,7 @@ i.fa-brands.fa-x-twitter::before {
 
     .mobile-icon-btn:hover,
     .mobile-icon-btn:active {
-        transform: scale(1.2);
+        transform: scale(1.08);
         box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
     }
 
@@ -715,6 +929,63 @@ i.fa-brands.fa-x-twitter::before {
         row-gap: 15px !important;
     }
 
+    /* Reason slider arrows on sides for mobile */
+    .reason-slider-wrapper {
+        position: relative !important;
+        overflow: visible !important;
+    }
+
+    .reason-slider-wrapper .array-button {
+        position: absolute !important;
+        top: 50% !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: translateY(-50%) !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        pointer-events: none;
+        z-index: 10;
+        padding: 0 5px !important;
+        margin: 0 !important;
+    }
+
+    .reason-slider-wrapper .array-button button {
+        pointer-events: all;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 2px solid rgba(0, 0, 0, 0.1) !important;
+        flex-shrink: 0 !important;
+    }
+
+    .reason-slider-wrapper .array-button .reason-array-prev {
+        margin-left: 0 !important;
+    }
+
+    .reason-slider-wrapper .array-button .reason-array-next {
+        margin-right: 0 !important;
+    }
+
+    .reason-slider-wrapper .array-button button i {
+        font-size: 16px !important;
+        color: #333 !important;
+    }
+    
+    .reason-card-slider {
+        padding: 15px 5px 40px !important;
+    }
+    
+    .reason-card-slider .service-card-item {
+        min-height: 200px !important;
+    }
+
     /* Reposition slider arrows to sides on mobile - centered on cards */
     .feature-section .section-title-area {
         position: static;
@@ -738,6 +1009,15 @@ i.fa-brands.fa-x-twitter::before {
         z-index: 10;
         padding: 0 !important;
         margin: 0 !important;
+    }
+
+    /* Taller hero for mobile */
+    .hero-banner-slider .swiper-slide {
+        min-height: 80vh;
+    }
+
+    .hero-slide-inner {
+        min-height: 80vh;
     }
 
     .feature-section .array-button .swiper-dot {
@@ -847,6 +1127,12 @@ i.fa-brands.fa-x-twitter::before {
     }
 }
 
+@media (min-width: 768px) {
+    .service-section .section-title h2 .title-highlight {
+        display: inline;
+    }
+}
+
 /* Mobile portrait */
 @media (max-width: 575px) {
 
@@ -920,6 +1206,9 @@ i.fa-brands.fa-x-twitter::before {
     .theme-btn {
         padding: 12px 25px !important;
         font-size: 14px !important;
+        max-width: 200px;
+        width: 100%;
+        justify-content: center;
     }
 
     /* Form fields */
@@ -1164,7 +1453,7 @@ body {
     /* Hero image starts from top; push slide content below the mobile navbar (~70px) */
     .hero-banner-slider .swiper-slide {
         padding-top: 0 !important;
-        padding-bottom: 60px !important;
+        padding-bottom: 80px !important;
     }
 
     .hero-slide-inner {

@@ -1,94 +1,44 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
-const services = [
-  {
-    id: '001',
-    title: 'Student Visa',
-    subtitle: 'Services',
-    features: [
-      'UK Student Visa guidance',
-      'Course & eligibility checks',
-      'Application preparation',
-      'Interview preparation',
-    ],
-  },
-  {
-    id: '002',
-    title: 'Skilled Worker &',
-    subtitle: 'Work Visa Services',
-    features: [
-      'Healthcare & Engineering roles',
-      'SOC code & Wage guidance',
-      'Employer sponsorship support',
-      'End-to-end visa guidance',
-    ],
-  },
-  {
-    id: '003',
-    title: 'Visit / Tourist',
-    subtitle: 'Visa Services',
-    features: [
-      'UK, Canada & USA Visas',
-      'Schengen Countries Assistance',
-      'Refusal-risk minimisation',
-      'Document preparation',
-    ],
-  },
-  {
-    id: '004',
-    title: 'International Work',
-    subtitle: 'Visa Assistance',
-    features: [
-      'Overseas work visa guidance',
-      'Profession eligibility checks',
-      'Document support',
-      'Step-by-step guidance',
-    ],
-  },
-  {
-    id: '005',
-    title: 'Job Application &',
-    subtitle: 'Career Support',
-    features: [
-      'UK & International CV/Resume',
-      'Job application assistance',
-      'Sponsored job guidance',
-      'Interview coaching',
-    ],
-  },
-  {
-    id: '006',
-    title: 'Legal & Compliance',
-    subtitle: 'Support',
-    features: [
-      'Visa documentation review',
-      'Compliance for employers',
-      'Compliance for applicants',
-      'Advisory support',
-    ],
-  },
-];
+import { useHomeContent } from '../context/HomeContentContext';
 
 const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
 export default function Features() {
+  const { homeContent, fetchHomeContent } = useHomeContent();
+  const location = useLocation();
+  const swiperRef = useRef(null);
+
+  useEffect(() => {
+    fetchHomeContent();
+  }, [fetchHomeContent, location.pathname]);
+
+  // Ensure autoplay starts
+  useEffect(() => {
+    if (!isMobile && swiperRef.current?.swiper?.autoplay) {
+      swiperRef.current.swiper.autoplay.start();
+    }
+  }, []);
+
+  const servicesSection = homeContent?.servicesSection || {};
+  const services = servicesSection.services || [];
+
   return (
     <section className="feature-section section-padding fix">
       <div className="container">
-        <div className="section-title-area">
-          <div className="section-title">
-            <h6 className="sub-title wow fadeInUp">
-              <img src="/assets/img/home-1/star.svg" alt="img" /> EXPLORE OUR SERVICES
-            </h6>
-            <h2 className="tx-title sec_title tz-itm-title tz-itm-anim">
-              Professional Visa & Immigration <br /> <span>Consultancy Services.</span>
-            </h2>
-          </div>
+        <div className="section-title text-center">
+          <h6 className="sub-title wow fadeInUp">
+            <img src="/assets/img/home-1/star.svg" alt="img" /> {servicesSection.eyebrow}
+          </h6>
+          <h2 className="tx-title sec_title tz-itm-title tz-itm-anim">
+            {servicesSection.title} <br /> <span>{servicesSection.titleHighlight}</span>
+          </h2>
         </div>
 
         <div className="feature-wrapper">
@@ -101,20 +51,22 @@ export default function Features() {
           </div>
 
           <Swiper
+            ref={swiperRef}
             modules={[Navigation, Pagination, Autoplay]}
             className="feature-box-slider"
             spaceBetween={30}
             speed={1300}
             loop
-            autoplay={isMobile ? false : { delay: 2000, disableOnInteraction: false }}
+            autoplay={isMobile ? false : { delay: 2000, disableOnInteraction: false, pauseOnMouseEnter: true }}
             navigation={{ nextEl: '.array-next', prevEl: '.array-prev' }}
             pagination={{ el: '.dot', clickable: true }}
+            centeredSlides={false}
             breakpoints={{
-              1199: { slidesPerView: 4 },
-              991:  { slidesPerView: 3 },
-              767:  { slidesPerView: 2 },
-              575:  { slidesPerView: 1.5 },
-              0:    { slidesPerView: 1.2 },
+              1199: { slidesPerView: 4, centeredSlides: false },
+              991:  { slidesPerView: 3, centeredSlides: false },
+              767:  { slidesPerView: 2, centeredSlides: false },
+              575:  { slidesPerView: 1.2, centeredSlides: true },
+              0:    { slidesPerView: 1.2, centeredSlides: true },
             }}
           >
             {services.map((svc) => (

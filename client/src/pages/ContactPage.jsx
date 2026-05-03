@@ -1,39 +1,59 @@
-import { useState } from 'react';
-
-const infoCards = [
-  {
-    icon: 'fa-sharp fa-solid fa-location-dot',
-    title: 'Our address',
-    content: (
-      <p>Pulse Creative & Consulting Ltd Mirror Works, 12 Marshgate Lane, London, E15 2NH.</p>
-    ),
-    delay: '.3s',
-  },
-  {
-    icon: 'fa-solid fa-phone-xmark',
-    title: 'Contact number',
-    content: (
-      <p>
-        <a className="d-block" href="tel:+447956273533">Mobile: +44 7956 273533</a>
-        <a href="mailto:info@pulsecc.co.uk">Email: info@pulsecc.co.uk</a><br />
-        <a href="mailto:admissions@pulsecc.co.uk">Email: admissions@pulsecc.co.uk</a><br />
-        <a href="mailto:consult@pulsecc.co.uk">Email: consult@pulsecc.co.uk</a>
-      </p>
-    ),
-    delay: '.5s',
-  },
-  {
-    icon: 'fa-regular fa-clock-two-thirty',
-    title: 'Open hour',
-    content: (
-      <p>Mon–Fri: 09:00–18:00 <br />Saturday: 10:00–15:00 <br />Sunday: Closed</p>
-    ),
-    delay: '.7s',
-  },
-];
+import { useEffect, useState } from 'react';
+import { useContactContent } from '../context/ContactContentContext';
 
 export default function ContactPage() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const { contactContent, fetchContactContent } = useContactContent();
+
+  useEffect(() => {
+    fetchContactContent();
+  }, [fetchContactContent]);
+
+  const infoCards = [
+    {
+      icon: 'fa-sharp fa-solid fa-location-dot',
+      title: contactContent?.addressTitle,
+      content: (
+        <p>
+          {(contactContent?.addressLines || []).map((line, i) => (
+            <span key={i} className="d-block">{line}</span>
+          ))}
+        </p>
+      ),
+      delay: '.3s',
+    },
+    {
+      icon: 'fa-solid fa-phone-xmark',
+      title: contactContent?.contactTitle,
+      content: (
+        <p>
+          {(contactContent?.phoneNumbers || []).map((phone, i) => (
+            <a key={`phone-${i}`} className="d-block" href={`tel:${phone.replace(/\s+/g, '')}`}>
+              {phone}
+            </a>
+          ))}
+          {(contactContent?.emails || []).map((email, i) => (
+            <span key={`email-${i}`} className="d-block">
+              <a href={`mailto:${email}`}>{email}</a>
+            </span>
+          ))}
+        </p>
+      ),
+      delay: '.5s',
+    },
+    {
+      icon: 'fa-regular fa-clock-two-thirty',
+      title: contactContent?.openHoursTitle,
+      content: (
+        <p>
+          {(contactContent?.openHoursLines || []).map((line, i) => (
+            <span key={i} className="d-block">{line}</span>
+          ))}
+        </p>
+      ),
+      delay: '.7s',
+    },
+  ];
 
   return (
     <>
@@ -84,7 +104,7 @@ export default function ContactPage() {
             <div className="row g-4">
               <div className="col-lg-6">
                 <div className="contact-map">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2481.8739425876374!2d-0.013833!3d51.5325642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761d3d6c2075e3%3A0xf9b0869c93d3250e!2sWorkspace%C2%AE%20%7C%20Mirror%20Works!5e0!3m2!1sen!2suk!4v1709000000000!5m2!1sen!2suk" style={{ border: 0 }} allowFullScreen loading="lazy"></iframe>
+                  <iframe src={contactContent?.mapEmbedUrl} style={{ border: 0 }} allowFullScreen loading="lazy"></iframe>
                 </div>
               </div>
               <div className="col-lg-6">

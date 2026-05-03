@@ -1,6 +1,16 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useContactContent } from '../context/ContactContentContext';
 
 export default function Footer() {
+  const { contactContent, fetchContactContent } = useContactContent();
+
+  useEffect(() => {
+    fetchContactContent();
+  }, [fetchContactContent]);
+
+  const phone = contactContent?.phoneNumbers?.[0];
+
   return (
     <footer className="footer-section">
       <div className="footer-area">
@@ -60,16 +70,17 @@ export default function Footer() {
                   </div>
                   <ul className="contact-list">
                     <li>
-                      Mirror Works, 12 Marshgate Lane <br />
-                      London, E15 2NH.
+                      {(contactContent?.addressLines || []).map((line, i) => (
+                        <span key={i} className="d-block">{line}</span>
+                      ))}
                     </li>
                     <li>
-                      <a href="tel:+447956273533">+44 7956 273533</a>
+                      {phone && <a href={`tel:${phone.replace(/\s+/g, '')}`}>{phone}</a>}
                     </li>
                     <li>
-                      Mon–Fri: 09:00–18:00 <br />
-                      Saturday: 10:00–15:00 <br />
-                      Sunday: Closed
+                      {(contactContent?.openHoursLines || []).map((line, i) => (
+                        <span key={i} className="d-block">{line}</span>
+                      ))}
                     </li>
                   </ul>
                 </div>

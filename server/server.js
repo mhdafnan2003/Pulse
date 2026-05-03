@@ -23,6 +23,9 @@ app.use('/assets', express.static(path.join(__dirname, '../assets')));
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/slides', require('./routes/slides'));
+app.use('/api/home-content', require('./routes/homeContent'));
+app.use('/api/service-content', require('./routes/servicePageContent'));
+app.use('/api/contact-content', require('./routes/contactContent'));
 app.use('/api/upload', require('./routes/upload'));
  
  // Root route

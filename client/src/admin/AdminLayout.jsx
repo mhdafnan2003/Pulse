@@ -1,8 +1,13 @@
+import { useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [location.pathname]);
 
   const logout = () => {
     localStorage.removeItem('adminToken');
@@ -22,8 +27,9 @@ export default function AdminLayout() {
         </div>
 
         <nav style={{ marginTop: 32 }}>
-          <SideLink to="/admin/slides" label="Hero Slides" icon="fa-solid fa-images" active={isActive('/admin/slides')} />
-          <SideLink to="/admin/slides/new" label="Add Slide" icon="fa-solid fa-plus-circle" active={isActive('/admin/slides/new')} />
+          <SideLink to="/admin/home-content" label="Homepage Content" icon="fa-solid fa-pen-to-square" active={isActive('/admin/home-content')} />
+          <SideLink to="/admin/service-content" label="Service Page Content" icon="fa-solid fa-list-check" active={isActive('/admin/service-content')} />
+          <SideLink to="/admin/contact-content" label="Contact Page Content" icon="fa-solid fa-address-book" active={isActive('/admin/contact-content')} />
           <div style={{ borderTop: '1px solid #1E3A5F', margin: '24px 0' }} />
           <a href="/" target="_blank" style={styles.sidelink}>
             <i className="fa-solid fa-arrow-up-right-from-square" style={{ width: 20 }} />

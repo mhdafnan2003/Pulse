@@ -17,6 +17,24 @@ export const slidesApi = {
   remove: (id) => api.delete(`/slides/${id}`),
 };
 
+export const homeContentApi = {
+  getPublic: () => api.get('/home-content'),
+  getAdmin: () => api.get('/home-content/admin'),
+  update: (data) => api.put('/home-content', data),
+};
+
+export const serviceContentApi = {
+  getPublic: () => api.get('/service-content'),
+  getAdmin: () => api.get('/service-content/admin'),
+  update: (data) => api.put('/service-content', data),
+};
+
+export const contactContentApi = {
+  getPublic: () => api.get('/contact-content'),
+  getAdmin: () => api.get('/contact-content/admin'),
+  update: (data) => api.put('/contact-content', data),
+};
+
 export const uploadApi = {
   uploadImage: (file) => {
     const form = new FormData();
