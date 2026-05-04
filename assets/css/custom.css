@@ -370,7 +370,7 @@ i.fa-brands.fa-x-twitter::before {
     position: relative;
     z-index: 2;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     min-height: inherit;
     padding-top: 64px;
 }
@@ -378,6 +378,8 @@ i.fa-brands.fa-x-twitter::before {
 .hero-slide-content {
     max-width: 660px;
     color: #fff;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .hero-slide-content p,
@@ -385,8 +387,24 @@ i.fa-brands.fa-x-twitter::before {
     color: #fff;
 }
 
+@media (min-width: 992px) {
+    .hero-slide-content h1 {
+        width: min(19ch, 100%);
+        margin: 0 auto;
+        text-wrap: balance;
+        line-height: 1.04;
+        font-size: clamp(42px, 4.2vw, 56px);
+    }
+
+    .hero-slide-content p {
+        max-width: 48ch;
+        margin: 0 auto;
+    }
+}
+
 .hero-slide-content .hero-button-group {
     margin-top: 28px;
+    justify-content: center;
 }
 
 .hero-eyebrow {
