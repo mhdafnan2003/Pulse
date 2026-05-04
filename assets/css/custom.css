@@ -1460,3 +1460,299 @@ body {
         padding-top: 90px !important;
     }
 }
+
+/* ========================================== */
+/* Zig-Zag Layout for About Us Page */
+/* ========================================== */
+
+/* Zig-Zag Section Container */
+.zigzag-section {
+    margin-bottom: 5rem;
+    scroll-margin-top: 100px;
+}
+
+.zigzag-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Zig-Zag Image Container */
+.zigzag-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.zigzag-image:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.zigzag-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.zigzag-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Zig-Zag Content Container */
+.zigzag-content {
+    padding: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Content Header Styling */
+.content-header {
+    margin-bottom: 1.5rem;
+}
+
+.section-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+}
+
+.accent-line {
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #F7931E, #FFB84D);
+    border-radius: 2px;
+    margin-top: 0.75rem;
+}
+
+/* Lead Text - Main Heading/Introduction */
+.lead-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #333333;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+}
+
+/* Body Text - Supporting Content */
+.body-text {
+    font-size: 1rem;
+    color: #555555;
+    line-height: 1.8;
+    margin: 1rem 0;
+    letter-spacing: 0.3px;
+    max-width: 100%;
+}
+
+.body-text:last-of-type {
+    margin-bottom: 1.5rem;
+}
+
+/* Highlight Box - Icon with Text */
+.highlight-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(247, 147, 30, 0.1), rgba(255, 184, 77, 0.1));
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    border-left: 4px solid #F7931E;
+    margin-top: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.highlight-box:hover {
+    background: linear-gradient(135deg, rgba(247, 147, 30, 0.15), rgba(255, 184, 77, 0.15));
+    transform: translateX(5px);
+}
+
+.highlight-box i {
+    font-size: 1.5rem;
+    color: #F7931E;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+
+.highlight-box span {
+    font-size: 0.95rem;
+    color: #333333;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Responsive Grid */
+.zigzag-section .row {
+    align-items: stretch;
+}
+
+/* Tab/Md Screens */
+@media (max-width: 991px) {
+    .zigzag-section {
+        margin-bottom: 3.5rem;
+    }
+
+    .zigzag-content {
+        padding: 1.5rem;
+    }
+
+    .section-heading {
+        font-size: 1.75rem;
+    }
+
+    .lead-text {
+        font-size: 1.05rem;
+    }
+
+    .body-text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+}
+
+/* Small Screens - Tablet */
+@media (max-width: 767px) {
+    .zigzag-section {
+        margin-bottom: 2.5rem;
+    }
+
+    .zigzag-section .row {
+        gap: 1.5rem !important;
+    }
+
+    .zigzag-content {
+        padding: 1.25rem;
+    }
+
+    .section-heading {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .accent-line {
+        width: 50px;
+        height: 3px;
+        margin-top: 0.5rem;
+    }
+
+    .lead-text {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .body-text {
+        font-size: 0.9rem;
+        line-height: 1.65;
+        margin: 0.75rem 0;
+    }
+
+    .highlight-box {
+        padding: 0.75rem 1rem;
+        margin-top: 1rem;
+        gap: 0.75rem;
+    }
+
+    .highlight-box i {
+        font-size: 1.25rem;
+    }
+
+    .highlight-box span {
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile Screens */
+@media (max-width: 575px) {
+    .company-info-section .section-title {
+        margin-bottom: 2rem;
+    }
+
+    .zigzag-section {
+        margin-bottom: 2rem;
+    }
+
+    .zigzag-section .row {
+        gap: 1rem !important;
+    }
+
+    .zigzag-image {
+        border-radius: 8px;
+    }
+
+    .zigzag-content {
+        padding: 1rem;
+    }
+
+    .section-heading {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .accent-line {
+        width: 40px;
+        height: 3px;
+    }
+
+    .lead-text {
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.5;
+        margin-bottom: 0.5rem;
+    }
+
+    .body-text {
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin: 0.5rem 0;
+        letter-spacing: 0.2px;
+    }
+
+    .body-text:last-of-type {
+        margin-bottom: 1rem;
+    }
+
+    .highlight-box {
+        padding: 0.625rem 0.75rem;
+        margin-top: 0.75rem;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .highlight-box i {
+        font-size: 1.1rem;
+        width: 20px;
+    }
+
+    .highlight-box span {
+        font-size: 0.8rem;
+    }
+}
+
+/* Extra Small Screens */
+@media (max-width: 380px) {
+    .zigzag-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-heading {
+        font-size: 1.1rem;
+    }
+
+    .lead-text {
+        font-size: 0.9rem;
+    }
+
+    .body-text {
+        font-size: 0.8rem;
+    }
+
+    .zigzag-content {
+        padding: 0.75rem;
+    }
+}

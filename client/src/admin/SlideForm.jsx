@@ -109,10 +109,6 @@ export default function SlideForm() {
           <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
           {uploading && <p style={{ color: '#3B82F6', fontSize: 13, marginTop: 8 }}>Uploading image…</p>}
 
-          <div style={styles.field}>
-            <label style={styles.label}>Or paste image URL</label>
-            <input style={styles.input} name="bgImage" value={form.bgImage} onChange={handleChange} placeholder="/assets/img/hero/slide.jpg" />
-          </div>
         </div>
 
         {/* Content */}
@@ -130,29 +126,6 @@ export default function SlideForm() {
             <label style={styles.label}>Body Text <span style={{ color: '#EF4444' }}>*</span></label>
             <textarea style={styles.textarea} name="body" value={form.body} onChange={handleChange} rows={4} placeholder="Describe this slide…" required />
           </div>
-        </div>
-
-        {/* Settings */}
-        <div style={styles.section}>
-          <h3 style={styles.sectionTitle}><i className="fa-solid fa-sliders" /> Settings</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            <div style={styles.field}>
-              <label style={styles.label}>WhatsApp Link</label>
-              <input style={styles.input} name="whatsappLink" value={form.whatsappLink} onChange={handleChange} />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Display Order</label>
-              <input style={styles.input} type="number" name="order" value={form.order} onChange={handleChange} min={1} />
-            </div>
-          </div>
-          <div style={styles.field}>
-            <label style={styles.label}>Gradient Overlay (CSS)</label>
-            <input style={styles.input} name="gradient" value={form.gradient} onChange={handleChange} />
-          </div>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8, cursor: 'pointer' }}>
-            <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange} style={{ width: 16, height: 16 }} />
-            <span style={{ fontSize: 14, color: '#374151', fontWeight: 500 }}>Active (visible on homepage)</span>
-          </label>
         </div>
 
         {/* Preview */}

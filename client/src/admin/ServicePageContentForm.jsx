@@ -1,6 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { serviceContentApi } from '../api';
 import { useServiceContent } from '../context/ServiceContentContext';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
+import { Separator } from '../components/ui/separator';
 
 const defaultForm = {
   services: [],
@@ -24,6 +30,7 @@ export default function ServicePageContentForm() {
   const lastAddedServiceFeatureRef = useRef(null);
   const focusNewServiceRef = useRef(false);
   const focusNewFeatureRef = useRef(false);
+  const [serviceOpenItems, setServiceOpenItems] = useState([]);
 
   useEffect(() => {
     let mounted = true;
@@ -82,11 +89,13 @@ export default function ServicePageContentForm() {
   };
 
   const addService = () => {
+    const nextIndex = form.services.length;
     focusNewServiceRef.current = true;
     setForm((prev) => ({
       ...prev,
       services: [...prev.services, newService(prev.services.length)],
     }));
+    setServiceOpenItems((prev) => Array.from(new Set([...prev, `service-${nextIndex}`])));
   };
 
   const removeService = (index) => {
@@ -94,6 +103,7 @@ export default function ServicePageContentForm() {
       const services = prev.services.filter((_, i) => i !== index);
       return { ...prev, services };
     });
+    setServiceOpenItems((prev) => shiftOpenItems(prev, index, 'service'));
   };
 
   const updateServiceFeature = (serviceIndex, featureIndex, value) => {
@@ -144,111 +154,135 @@ export default function ServicePageContentForm() {
   };
 
   if (loading) {
-    return <div style={styles.loading}>Loading service page content…</div>;
+    return <div className="py-16 text-center text-sm text-slate-500">Loading service page content…</div>;
   }
 
+  const services = form.services || [];
+  const serviceAccordionKey = services.length;
+
   return (
-    <div style={{ maxWidth: 980 }}>
-      <div style={styles.pageHeader}>
+    <div className="mx-auto max-w-5xl space-y-6">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 style={styles.pageTitle}>Service Page Content</h1>
-          <p style={styles.pageSub}>Edit the service cards (title, subtitle, and points).</p>
+          <h1 className="text-2xl font-semibold text-slate-900">Service Page Content</h1>
+          <p className="text-sm text-slate-500">Edit the service cards, subtitles, and points.</p>
         </div>
+        <Button type="submit" form="service-content-form" size="sm" disabled={saving}>
+          {saving ? 'Saving…' : 'Save Changes'}
+        </Button>
       </div>
 
-      {msg && <div style={styles.toast}>{msg}</div>}
-      {error && <div style={styles.errBox}>{error}</div>}
+      {msg && <div className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{msg}</div>}
+      {error && <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
 
-      <form onSubmit={handleSave}>
-        <div style={styles.section}>
-          <div style={styles.inlineHeader}>
-            <h3 style={styles.sectionTitle}><i className="fa-solid fa-briefcase" /> Service Cards</h3>
-            <button type="button" style={styles.smallBtn} onClick={addService}>+ Add Service</button>
-          </div>
-
-          {form.services.map((svc, i) => {
-            const isLastAdded = i === form.services.length - 1;
-            return (
-            <div key={i} style={styles.cardRow}>
-              <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr 1fr', gap: 12 }}>
-                <div style={styles.field}>
-                  <label style={styles.label}>ID</label>
-                  <input style={styles.input} value={svc.id} onChange={(e) => updateService(i, 'id', e.target.value)} />
-                </div>
-                <div style={styles.field}>
-                  <label style={styles.label}>Title</label>
-                  <input 
-                    ref={isLastAdded ? lastAddedServiceRef : null}
-                    style={styles.input} 
-                    value={svc.title} 
-                    onChange={(e) => updateService(i, 'title', e.target.value)} 
-                  />
-                </div>
-                <div style={styles.field}>
-                  <label style={styles.label}>Subtitle</label>
-                  <input style={styles.input} value={svc.subtitle} onChange={(e) => updateService(i, 'subtitle', e.target.value)} />
-                </div>
-              </div>
-
-              <div style={{ marginTop: 10 }}>
-                <div style={styles.inlineHeader}>
-                  <h5 style={styles.subHeading}>Points</h5>
-                  <button type="button" style={styles.smallBtn} onClick={() => addServiceFeature(i)}>+ Add Point</button>
-                </div>
-                {(svc.features || []).map((feat, fIndex) => {
-                  const isLastFeature = fIndex === (svc.features || []).length - 1;
+      <form id="service-content-form" onSubmit={handleSave} className="space-y-4">
+        <Card>
+          <CardHeader className="flex-row items-center justify-between">
+            <div>
+              <CardTitle>Service Cards</CardTitle>
+              <CardDescription>Collapse each card to keep the list compact.</CardDescription>
+            </div>
+            <Button type="button" size="sm" variant="outline" onClick={addService}>Add Service</Button>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {services.length === 0 ? (
+              <div className="py-6 text-center text-sm text-slate-500">No services yet.</div>
+            ) : (
+              <Accordion
+                key={serviceAccordionKey}
+                type="multiple"
+                value={serviceOpenItems}
+                onValueChange={setServiceOpenItems}
+                className="space-y-2"
+              >
+                {services.map((svc, i) => {
+                  const isLastAdded = i === services.length - 1;
+                  const points = svc.features || [];
                   return (
-                  <div key={fIndex} style={styles.featureRow}>
-                    <input
-                      ref={isLastFeature ? lastAddedServiceFeatureRef : null}
-                      style={styles.input}
-                      value={feat}
-                      onChange={(e) => updateServiceFeature(i, fIndex, e.target.value)}
-                      placeholder="Feature"
-                    />
-                    <button type="button" style={styles.removeBtn} onClick={() => removeServiceFeature(i, fIndex)}>
-                      <i className="fa-solid fa-xmark" />
-                    </button>
-                  </div>
+                    <AccordionItem key={`service-${i}`} value={`service-${i}`}>
+                      <AccordionTrigger>
+                        <span className="text-sm">Service {i + 1}{svc.title ? ` · ${svc.title}` : ''}</span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="grid gap-4">
+                          <div className="grid gap-3 sm:grid-cols-[90px,1fr,1fr]">
+                            <div className="space-y-1">
+                              <Label>ID</Label>
+                              <Input value={svc.id} onChange={(e) => updateService(i, 'id', e.target.value)} />
+                            </div>
+                            <div className="space-y-1">
+                              <Label>Title</Label>
+                              <Input
+                                ref={isLastAdded ? lastAddedServiceRef : null}
+                                value={svc.title}
+                                onChange={(e) => updateService(i, 'title', e.target.value)}
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <Label>Subtitle</Label>
+                              <Input value={svc.subtitle} onChange={(e) => updateService(i, 'subtitle', e.target.value)} />
+                            </div>
+                          </div>
+
+                          <Separator />
+
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <Label>Points</Label>
+                              <Button type="button" size="sm" variant="secondary" onClick={() => addServiceFeature(i)}>
+                                Add Point
+                              </Button>
+                            </div>
+                            <div className="space-y-2">
+                              {points.length === 0 ? (
+                                <div className="text-xs text-slate-500">No points yet.</div>
+                              ) : (
+                                points.map((feat, fIndex) => {
+                                  const isLastFeature = fIndex === points.length - 1;
+                                  return (
+                                    <div key={fIndex} className="flex items-center gap-2">
+                                      <Input
+                                        ref={isLastFeature ? lastAddedServiceFeatureRef : null}
+                                        value={feat}
+                                        onChange={(e) => updateServiceFeature(i, fIndex, e.target.value)}
+                                        placeholder="Point"
+                                      />
+                                      <Button type="button" size="icon" variant="ghost" onClick={() => removeServiceFeature(i, fIndex)}>
+                                        <i className="fa-solid fa-xmark" />
+                                      </Button>
+                                    </div>
+                                  );
+                                })
+                              )}
+                            </div>
+                          </div>
+
+                          <Button type="button" size="sm" variant="destructive" onClick={() => removeService(i)}>
+                            Remove Service
+                          </Button>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
                   );
                 })}
-              </div>
-
-              <button type="button" style={styles.removeBtn} onClick={() => removeService(i)}>
-                <i className="fa-solid fa-trash" /> Remove Service
-              </button>
-            </div>
-            );
-          })}
-        </div>
-
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button type="submit" style={styles.saveBtn} disabled={saving}>
-            {saving ? 'Saving…' : 'Save Changes'}
-          </button>
-        </div>
+              </Accordion>
+            )}
+          </CardContent>
+        </Card>
       </form>
     </div>
   );
 }
 
-const styles = {
-  pageHeader: { marginBottom: 24 },
-  pageTitle: { margin: 0, fontSize: 26, fontWeight: 700, color: '#0F172A' },
-  pageSub: { margin: '4px 0 0', color: '#64748B', fontSize: 14 },
-  loading: { textAlign: 'center', padding: 60, color: '#64748B' },
-  toast: { background: '#D1FAE5', border: '1px solid #6EE7B7', color: '#065F46', borderRadius: 8, padding: '10px 16px', marginBottom: 20, fontSize: 14 },
-  errBox: { background: '#FEE2E2', border: '1px solid #FCA5A5', color: '#991B1B', borderRadius: 8, padding: '10px 16px', marginBottom: 20, fontSize: 14 },
-  section: { background: '#fff', borderRadius: 12, padding: '24px 28px', marginBottom: 20, border: '1px solid #E2E8F0' },
-  sectionTitle: { margin: 0, fontSize: 15, fontWeight: 700, color: '#334155', display: 'flex', alignItems: 'center', gap: 8 },
-  field: { marginBottom: 12 },
-  label: { display: 'block', marginBottom: 6, fontWeight: 600, fontSize: 13, color: '#374151' },
-  input: { width: '100%', boxSizing: 'border-box', padding: '10px 12px', border: '1px solid #D1D5DB', borderRadius: 8, fontSize: 14, outline: 'none', color: '#111' },
-  cardRow: { border: '1px solid #E2E8F0', borderRadius: 10, padding: 16, marginBottom: 14, background: '#F8FAFC' },
-  inlineHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
-  subHeading: { margin: 0, fontSize: 13, fontWeight: 700, color: '#475569' },
-  smallBtn: { padding: '6px 12px', background: '#EFF6FF', color: '#3B82F6', border: '1px solid #BFDBFE', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
-  removeBtn: { marginTop: 10, padding: '6px 12px', background: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 },
-  featureRow: { display: 'grid', gridTemplateColumns: '1fr auto', gap: 10, alignItems: 'center', marginBottom: 8 },
-  saveBtn: { padding: '12px 28px', background: '#3B82F6', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: 'pointer' },
-};
+function shiftOpenItems(items, removedIndex, prefix) {
+  return items
+    .map((value) => {
+      if (!value.startsWith(`${prefix}-`)) return value;
+      const index = Number(value.slice(prefix.length + 1));
+      if (Number.isNaN(index)) return null;
+      if (index === removedIndex) return null;
+      if (index > removedIndex) return `${prefix}-${index - 1}`;
+      return value;
+    })
+    .filter(Boolean);
+}

@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom';
 import { homeContentApi, slidesApi } from '../api';
 import { useHomeContent } from '../context/HomeContentContext';
 import { useSlides } from '../context/SlidesContext';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
+import { Label } from '../components/ui/label';
+import { Badge } from '../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
+import { Separator } from '../components/ui/separator';
 
 const defaultForm = {
   reasonSection: {
@@ -54,10 +63,10 @@ export default function HomeContentForm() {
   const [msg, setMsg] = useState('');
   const [slideMsg, setSlideMsg] = useState('');
   const [deleting, setDeleting] = useState(null);
-  const [showMoreReasonCards, setShowMoreReasonCards] = useState(false);
-  const [showMoreServices, setShowMoreServices] = useState(false);
-  const [showMoreTestimonials, setShowMoreTestimonials] = useState(false);
   const [lastServiceIndexWithFeature, setLastServiceIndexWithFeature] = useState(null);
+  const [reasonOpenItems, setReasonOpenItems] = useState([]);
+  const [serviceOpenItems, setServiceOpenItems] = useState([]);
+  const [testimonialOpenItems, setTestimonialOpenItems] = useState([]);
   const { setHomeContent } = useHomeContent();
   const { slides, loading: slidesLoading, error: slidesError, fetchSlides } = useSlides();
   
@@ -65,11 +74,6 @@ export default function HomeContentForm() {
   const lastAddedReasonCardRef = useRef(null);
   const lastAddedServiceRef = useRef(null);
   const lastAddedTestimonialRef = useRef(null);
-  const lastAddedFeatureRef = useRef(null);
-  const reasonCardContainerRef = useRef(null);
-  const serviceContainerRef = useRef(null);
-  const testimonialContainerRef = useRef(null);
-  const featureContainerRef = useRef(null);
   const lastAddedServiceFeatureRef = useRef(null);
 
   useEffect(() => {
@@ -118,11 +122,9 @@ export default function HomeContentForm() {
 
   // Auto-focus on newly added service
   useEffect(() => {
-    console.log('Service useEffect triggered, ref exists:', !!lastAddedServiceRef.current);
     if (lastAddedServiceRef.current) {
       const timer = setTimeout(() => {
         if (lastAddedServiceRef.current) {
-          console.log('Scrolling to service Title field');
           lastAddedServiceRef.current.focus();
           lastAddedServiceRef.current.scrollIntoView({ 
             behavior: 'smooth', 
@@ -208,6 +210,7 @@ export default function HomeContentForm() {
   };
 
   const addReasonCard = () => {
+    const nextIndex = reasonCards.length;
     setForm((prev) => ({
       ...prev,
       reasonSection: {
@@ -215,8 +218,7 @@ export default function HomeContentForm() {
         cards: [...prev.reasonSection.cards, { ...newReasonCard }],
       },
     }));
-    // Auto-expand to show the new card
-    setShowMoreReasonCards(true);
+    setReasonOpenItems((prev) => Array.from(new Set([...prev, `reason-${nextIndex}`])));
   };
 
   const removeReasonCard = (index) => {
@@ -227,6 +229,7 @@ export default function HomeContentForm() {
         reasonSection: { ...prev.reasonSection, cards },
       };
     });
+    setReasonOpenItems((prev) => shiftOpenItems(prev, index, 'reason'));
   };
 
   const updateService = (index, field, value) => {
@@ -241,6 +244,7 @@ export default function HomeContentForm() {
   };
 
   const addService = () => {
+    const nextIndex = services.length;
     setForm((prev) => ({
       ...prev,
       servicesSection: {
@@ -248,8 +252,7 @@ export default function HomeContentForm() {
         services: [...prev.servicesSection.services, newService(prev.servicesSection.services.length)],
       },
     }));
-    // Auto-expand to show the new service
-    setShowMoreServices(true);
+    setServiceOpenItems((prev) => Array.from(new Set([...prev, `service-${nextIndex}`])));
   };
 
   const removeService = (index) => {
@@ -260,6 +263,7 @@ export default function HomeContentForm() {
         servicesSection: { ...prev.servicesSection, services },
       };
     });
+    setServiceOpenItems((prev) => shiftOpenItems(prev, index, 'service'));
   };
 
   const updateServiceFeature = (serviceIndex, featureIndex, value) => {
@@ -314,6 +318,7 @@ export default function HomeContentForm() {
   };
 
   const addTestimonial = () => {
+    const nextIndex = testimonials.length;
     setForm((prev) => ({
       ...prev,
       testimonialsSection: {
@@ -321,8 +326,7 @@ export default function HomeContentForm() {
         items: [...prev.testimonialsSection.items, { ...newTestimonial }],
       },
     }));
-    // Auto-expand to show the new testimonial
-    setShowMoreTestimonials(true);
+    setTestimonialOpenItems((prev) => Array.from(new Set([...prev, `testimonial-${nextIndex}`])));
   };
 
   const removeTestimonial = (index) => {
@@ -333,6 +337,7 @@ export default function HomeContentForm() {
         testimonialsSection: { ...prev.testimonialsSection, items },
       };
     });
+    setTestimonialOpenItems((prev) => shiftOpenItems(prev, index, 'testimonial'));
   };
 
   const handleSave = async (e) => {
@@ -353,478 +358,411 @@ export default function HomeContentForm() {
   };
 
   if (loading) {
-    return <div style={styles.loading}>Loading home content…</div>;
+    return <div className="py-16 text-center text-sm text-slate-500">Loading home content…</div>;
   }
 
   const reasonCards = form.reasonSection.cards || [];
   const services = form.servicesSection.services || [];
   const testimonials = form.testimonialsSection.items || [];
 
+  const reasonAccordionKey = reasonCards.length;
+  const serviceAccordionKey = services.length;
+  const testimonialAccordionKey = testimonials.length;
+
   return (
-    <div style={{ maxWidth: 980 }}>
-      <div style={styles.pageHeader}>
+    <div className="mx-auto max-w-5xl space-y-6">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 style={styles.pageTitle}>Homepage Content</h1>
-          <p style={styles.pageSub}>Edit the “Reason to Choose Us” and “Services” sections.</p>
+          <h1 className="text-2xl font-semibold text-slate-900">Homepage Content</h1>
+          <p className="text-sm text-slate-500">Quick edits for hero slides, reason cards, services, and testimonials.</p>
         </div>
+        <Button type="submit" form="home-content-form" size="sm" disabled={saving}>
+          {saving ? 'Saving…' : 'Save Changes'}
+        </Button>
       </div>
 
-      {msg && <div style={styles.toast}>{msg}</div>}
-      {error && <div style={styles.errBox}>{error}</div>}
+      {msg && <div className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{msg}</div>}
+      {error && <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
 
-      <form onSubmit={handleSave}>
-        {/* Hero Slides Section */}
-        <div style={styles.section}>
-          <div style={styles.inlineHeader}>
-            <h3 style={styles.sectionTitle}><i className="fa-solid fa-images" /> Hero Slides</h3>
-            <Link to="/admin/slides/new" style={styles.smallBtn}>
-              <i className="fa-solid fa-plus" /> Add Slide
-            </Link>
-          </div>
+      <form id="home-content-form" onSubmit={handleSave} className="space-y-4">
+        <Tabs defaultValue="slides" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-2 gap-1 sm:grid-cols-4">
+            <TabsTrigger value="slides">Slides</TabsTrigger>
+            <TabsTrigger value="reason">Reason</TabsTrigger>
+            <TabsTrigger value="services">Services</TabsTrigger>
+            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+          </TabsList>
 
-          {slideMsg && <div style={styles.toast}>{slideMsg}</div>}
-          {slidesError && <div style={styles.errBox}>{slidesError}</div>}
+          <TabsContent value="slides">
+            <Card>
+              <CardHeader className="flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Hero Slides</CardTitle>
+                  <CardDescription>Manage the hero carousel content and visibility.</CardDescription>
+                </div>
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/admin/slides/new">Add Slide</Link>
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {slideMsg && <div className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{slideMsg}</div>}
+                {slidesError && <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{slidesError}</div>}
 
-          {slidesLoading ? (
-            <div style={styles.loading}>Loading slides…</div>
-          ) : slides.length === 0 ? (
-            <div style={styles.empty}>No slides yet. <Link to="/admin/slides/new">Add one →</Link></div>
-          ) : (
-            <div style={styles.slideGrid}>
-              {slides.map((slide, i) => (
-                <div key={slide._id} style={styles.slideCard}>
-                  <div
-                    style={{
-                      ...styles.slideBg,
-                      backgroundImage: `${slide.gradient}, url('${slide.bgImage}')`,
-                    }}
-                  >
-                    <span style={styles.orderBadge}>#{slide.order || i + 1}</span>
-                    <span style={{ ...styles.activeBadge, background: slide.isActive ? '#22C55E' : '#EF4444' }}>
-                      {slide.isActive ? 'Active' : 'Inactive'}
-                    </span>
+                {slidesLoading ? (
+                  <div className="py-6 text-center text-sm text-slate-500">Loading slides…</div>
+                ) : slides.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-slate-500">No slides yet. Add your first slide.</div>
+                ) : (
+                  <div className="grid gap-3 md:grid-cols-2">
+                    {slides.map((slide, i) => (
+                      <Card key={slide._id} className="overflow-hidden">
+                        <div
+                          className="relative h-32 bg-cover bg-center"
+                          style={{ backgroundImage: `${slide.gradient}, url('${slide.bgImage}')` }}
+                        >
+                          <div className="absolute left-2 top-2 rounded-md bg-black/60 px-2 py-1 text-[11px] font-semibold text-white">
+                            #{slide.order || i + 1}
+                          </div>
+                          <div className="absolute right-2 top-2">
+                            <Badge variant={slide.isActive ? 'success' : 'destructive'}>
+                              {slide.isActive ? 'Active' : 'Hidden'}
+                            </Badge>
+                          </div>
+                        </div>
+                        <CardContent className="space-y-2 pt-3">
+                          <div className="text-sm font-semibold text-slate-900">
+                            {slide.title} {slide.titleHighlight && <span className="text-slate-500">{slide.titleHighlight}</span>}
+                          </div>
+                          <p className="text-xs text-slate-500">{slide.body.substring(0, 90)}…</p>
+                          <div className="flex flex-wrap gap-2">
+                            <Button asChild size="sm" variant="outline">
+                              <Link to={`/admin/slides/${slide._id}/edit`}>Edit</Link>
+                            </Button>
+                            <Button type="button" size="sm" variant="secondary" onClick={() => toggleSlideActive(slide)}>
+                              {slide.isActive ? 'Hide' : 'Show'}
+                            </Button>
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="destructive"
+                              onClick={() => handleSlideDelete(slide._id, slide.title)}
+                              disabled={deleting === slide._id}
+                            >
+                              {deleting === slide._id ? 'Deleting…' : 'Delete'}
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
-                  <div style={styles.slideBody}>
-                    <h4 style={styles.slideTitle}>
-                      {slide.title} {slide.titleHighlight && <span style={{ color: '#3B82F6' }}>{slide.titleHighlight}</span>}
-                    </h4>
-                    <p style={styles.slideText}>{slide.body.substring(0, 90)}…</p>
-                    <div style={styles.slideActions}>
-                      <Link to={`/admin/slides/${slide._id}/edit`} style={styles.editBtn}>
-                        <i className="fa-solid fa-pen" /> Edit
-                      </Link>
-                      <button type="button" onClick={() => toggleSlideActive(slide)} style={styles.toggleBtn}>
-                        <i className={`fa-solid fa-${slide.isActive ? 'eye-slash' : 'eye'}`} />
-                        {slide.isActive ? ' Hide' : ' Show'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleSlideDelete(slide._id, slide.title)}
-                        style={styles.delBtn}
-                        disabled={deleting === slide._id}
-                      >
-                        <i className="fa-solid fa-trash" /> {deleting === slide._id ? '…' : 'Delete'}
-                      </button>
-                    </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="reason" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Reason Section Settings</CardTitle>
+                <CardDescription>Update headline copy for the "Reason to Choose Us" section.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Label>Eyebrow</Label>
+                    <Input value={form.reasonSection.eyebrow} onChange={(e) => handleSectionChange('reasonSection', 'eyebrow', e.target.value)} />
+                  </div>
+                  <div className="space-y-1">
+                    <Label>Title Highlight</Label>
+                    <Input value={form.reasonSection.titleHighlight} onChange={(e) => handleSectionChange('reasonSection', 'titleHighlight', e.target.value)} />
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <div className="space-y-1">
+                  <Label>Title</Label>
+                  <Input value={form.reasonSection.title} onChange={(e) => handleSectionChange('reasonSection', 'title', e.target.value)} />
+                </div>
+                <div className="space-y-1">
+                  <Label>Description</Label>
+                  <Textarea rows={3} value={form.reasonSection.description} onChange={(e) => handleSectionChange('reasonSection', 'description', e.target.value)} />
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Reason Section */}
-        <div style={styles.section}>
-          <h3 style={styles.sectionTitle}><i className="fa-solid fa-award" /> Reason to Choose Us</h3>
-
-          <div style={styles.field}>
-            <label style={styles.label}>Eyebrow</label>
-            <input style={styles.input} value={form.reasonSection.eyebrow} onChange={(e) => handleSectionChange('reasonSection', 'eyebrow', e.target.value)} />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
-            <div style={styles.field}>
-              <label style={styles.label}>Title</label>
-              <input style={styles.input} value={form.reasonSection.title} onChange={(e) => handleSectionChange('reasonSection', 'title', e.target.value)} />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Title Highlight</label>
-              <input style={styles.input} value={form.reasonSection.titleHighlight} onChange={(e) => handleSectionChange('reasonSection', 'titleHighlight', e.target.value)} />
-            </div>
-          </div>
-          <div style={styles.field}>
-            <label style={styles.label}>Description</label>
-            <textarea style={styles.textarea} rows={3} value={form.reasonSection.description} onChange={(e) => handleSectionChange('reasonSection', 'description', e.target.value)} />
-          </div>
-
-          <div style={{ marginTop: 16 }}>
-            <div style={styles.inlineHeader}>
-              <h4 style={styles.subHeading}>Cards</h4>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                {reasonCards.length > 1 && (
-                  <button
-                    type="button"
-                    style={styles.smallBtn}
-                    onClick={() => setShowMoreReasonCards((prev) => !prev)}
+            <Card>
+              <CardHeader className="flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Reason Cards</CardTitle>
+                  <CardDescription>Collapse each card to keep the list compact.</CardDescription>
+                </div>
+                <Button type="button" size="sm" variant="outline" onClick={addReasonCard}>Add Card</Button>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {reasonCards.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-slate-500">No cards yet.</div>
+                ) : (
+                  <Accordion
+                    key={reasonAccordionKey}
+                    type="multiple"
+                    value={reasonOpenItems}
+                    onValueChange={setReasonOpenItems}
+                    className="space-y-2"
                   >
-                    {showMoreReasonCards ? 'Hide extra cards' : `View more cards (${reasonCards.length - 1})`}
-                  </button>
+                    {reasonCards.map((card, i) => {
+                      const isLastAdded = i === reasonCards.length - 1;
+                      return (
+                        <AccordionItem key={`reason-${i}`} value={`reason-${i}`}>
+                          <AccordionTrigger>
+                            <span className="text-sm">Card {i + 1}{card.title ? ` · ${card.title}` : ''}</span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="grid gap-3">
+                              <input type="hidden" value={card.icon} onChange={(e) => updateReasonCard(i, 'icon', e.target.value)} />
+                              <div className="space-y-1">
+                                <Label>Title</Label>
+                                <Input
+                                  ref={isLastAdded ? lastAddedReasonCardRef : null}
+                                  value={card.title}
+                                  onChange={(e) => updateReasonCard(i, 'title', e.target.value)}
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <Label>Description</Label>
+                                <Textarea rows={2} value={card.desc} onChange={(e) => updateReasonCard(i, 'desc', e.target.value)} />
+                              </div>
+                              <Button type="button" size="sm" variant="destructive" onClick={() => removeReasonCard(i)}>
+                                Remove Card
+                              </Button>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
                 )}
-                <button type="button" style={styles.smallBtn} onClick={addReasonCard}>+ Add Card</button>
-              </div>
-            </div>
-            {reasonCards.length === 0 ? (
-              <div style={styles.empty}>No cards yet. Add your first card.</div>
-            ) : (
-              <>
-                {[reasonCards[0]].map((card, i) => (
-                  <div key={`reason-card-${i}`} style={styles.cardRow}>
-                    <input type="hidden" value={card.icon} onChange={(e) => updateReasonCard(i, 'icon', e.target.value)} />
-                    <div style={styles.field}>
-                      <label style={styles.label}>Title</label>
-                      <input 
-                        ref={reasonCards.length === 1 ? lastAddedReasonCardRef : null}
-                        style={styles.input} 
-                        value={card.title} 
-                        onChange={(e) => updateReasonCard(i, 'title', e.target.value)} 
-                      />
-                    </div>
-                    <div style={styles.field}>
-                      <label style={styles.label}>Description</label>
-                      <textarea style={styles.textarea} rows={2} value={card.desc} onChange={(e) => updateReasonCard(i, 'desc', e.target.value)} />
-                    </div>
-                    <button type="button" style={styles.removeBtn} onClick={() => removeReasonCard(i)}>
-                      <i className="fa-solid fa-trash" /> Remove
-                    </button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="services" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Services Section Settings</CardTitle>
+                <CardDescription>Update the services intro copy shown on the homepage.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Label>Eyebrow</Label>
+                    <Input value={form.servicesSection.eyebrow} onChange={(e) => handleSectionChange('servicesSection', 'eyebrow', e.target.value)} />
                   </div>
-                ))}
-                {showMoreReasonCards && reasonCards.slice(1).map((card, i) => {
-                  const index = i + 1;
-                  const isLastAdded = index === reasonCards.length - 1;
-                  return (
-                    <div key={`reason-card-${index}`} style={styles.cardRow}>
-                      <input type="hidden" value={card.icon} onChange={(e) => updateReasonCard(index, 'icon', e.target.value)} />
-                      <div style={styles.field}>
-                        <label style={styles.label}>Title</label>
-                        <input 
-                          ref={isLastAdded ? lastAddedReasonCardRef : null}
-                          style={styles.input} 
-                          value={card.title} 
-                          onChange={(e) => updateReasonCard(index, 'title', e.target.value)} 
-                        />
-                      </div>
-                      <div style={styles.field}>
-                        <label style={styles.label}>Description</label>
-                        <textarea style={styles.textarea} rows={2} value={card.desc} onChange={(e) => updateReasonCard(index, 'desc', e.target.value)} />
-                      </div>
-                      <button type="button" style={styles.removeBtn} onClick={() => removeReasonCard(index)}>
-                        <i className="fa-solid fa-trash" /> Remove
-                      </button>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </div>
-        </div>
+                  <div className="space-y-1">
+                    <Label>Title Highlight</Label>
+                    <Input value={form.servicesSection.titleHighlight} onChange={(e) => handleSectionChange('servicesSection', 'titleHighlight', e.target.value)} />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <Label>Title</Label>
+                  <Input value={form.servicesSection.title} onChange={(e) => handleSectionChange('servicesSection', 'title', e.target.value)} />
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Services Section */}
-        <div style={styles.section}>
-          <h3 style={styles.sectionTitle}><i className="fa-solid fa-briefcase" /> Services Section</h3>
-
-          <div style={styles.field}>
-            <label style={styles.label}>Eyebrow</label>
-            <input style={styles.input} value={form.servicesSection.eyebrow} onChange={(e) => handleSectionChange('servicesSection', 'eyebrow', e.target.value)} />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
-            <div style={styles.field}>
-              <label style={styles.label}>Title</label>
-              <input style={styles.input} value={form.servicesSection.title} onChange={(e) => handleSectionChange('servicesSection', 'title', e.target.value)} />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Title Highlight</label>
-              <input style={styles.input} value={form.servicesSection.titleHighlight} onChange={(e) => handleSectionChange('servicesSection', 'titleHighlight', e.target.value)} />
-            </div>
-          </div>
-
-          <div style={{ marginTop: 16 }}>
-            <div style={styles.inlineHeader}>
-              <h4 style={styles.subHeading}>Service Cards</h4>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                {services.length > 1 && (
-                  <button
-                    type="button"
-                    style={styles.smallBtn}
-                    onClick={() => setShowMoreServices((prev) => !prev)}
+            <Card>
+              <CardHeader className="flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Service Cards</CardTitle>
+                  <CardDescription>Keep services compact with collapsible cards.</CardDescription>
+                </div>
+                <Button type="button" size="sm" variant="outline" onClick={addService}>Add Service</Button>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {services.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-slate-500">No services yet.</div>
+                ) : (
+                  <Accordion
+                    key={serviceAccordionKey}
+                    type="multiple"
+                    value={serviceOpenItems}
+                    onValueChange={setServiceOpenItems}
+                    className="space-y-2"
                   >
-                    {showMoreServices ? 'Hide extra services' : `View more services (${services.length - 1})`}
-                  </button>
+                    {services.map((svc, i) => {
+                      const isLastAdded = i === services.length - 1;
+                      const points = svc.features || [];
+                      return (
+                        <AccordionItem key={`service-${i}`} value={`service-${i}`}>
+                          <AccordionTrigger>
+                            <span className="text-sm">Service {i + 1}{svc.title ? ` · ${svc.title}` : ''}</span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="grid gap-4">
+                              <div className="grid gap-3 sm:grid-cols-[90px,1fr,1fr]">
+                                <div className="space-y-1">
+                                  <Label>ID</Label>
+                                  <Input value={svc.id} onChange={(e) => updateService(i, 'id', e.target.value)} />
+                                </div>
+                                <div className="space-y-1">
+                                  <Label>Title</Label>
+                                  <Input
+                                    ref={isLastAdded ? lastAddedServiceRef : null}
+                                    value={svc.title}
+                                    onChange={(e) => updateService(i, 'title', e.target.value)}
+                                  />
+                                </div>
+                                <div className="space-y-1">
+                                  <Label>Subtitle</Label>
+                                  <Input value={svc.subtitle} onChange={(e) => updateService(i, 'subtitle', e.target.value)} />
+                                </div>
+                              </div>
+
+                              <Separator />
+
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <Label>Points</Label>
+                                  <Button type="button" size="sm" variant="secondary" onClick={() => addServiceFeature(i)}>
+                                    Add Point
+                                  </Button>
+                                </div>
+                                <div className="space-y-2">
+                                  {points.length === 0 ? (
+                                    <div className="text-xs text-slate-500">No points yet.</div>
+                                  ) : (
+                                    points.map((feat, fIndex) => {
+                                      const isLastFeature = fIndex === points.length - 1;
+                                      const isLastServiceFeature = isLastFeature && i === lastServiceIndexWithFeature;
+                                      return (
+                                        <div key={fIndex} className="flex items-center gap-2">
+                                          <Input
+                                            ref={isLastServiceFeature ? lastAddedServiceFeatureRef : null}
+                                            value={feat}
+                                            onChange={(e) => updateServiceFeature(i, fIndex, e.target.value)}
+                                            placeholder="Point"
+                                          />
+                                          <Button type="button" size="icon" variant="ghost" onClick={() => removeServiceFeature(i, fIndex)}>
+                                            <i className="fa-solid fa-xmark" />
+                                          </Button>
+                                        </div>
+                                      );
+                                    })
+                                  )}
+                                </div>
+                              </div>
+
+                              <Button type="button" size="sm" variant="destructive" onClick={() => removeService(i)}>
+                                Remove Service
+                              </Button>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
                 )}
-                <button type="button" style={styles.smallBtn} onClick={addService}>+ Add Service</button>
-              </div>
-            </div>
-            {services.length === 0 ? (
-              <div style={styles.empty}>No services yet. Add your first service.</div>
-            ) : (
-              <>
-                {[services[0]].map((svc, i) => {
-                  const isLastAdded = services.length === 1;
-                  return (
-                  <div key={`service-card-${i}`} style={styles.cardRow}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr 1fr', gap: 12 }}>
-                      <div style={styles.field}>
-                        <label style={styles.label}>ID</label>
-                        <input style={styles.input} value={svc.id} onChange={(e) => updateService(i, 'id', e.target.value)} />
-                      </div>
-                      <div style={styles.field}>
-                        <label style={styles.label}>Title</label>
-                        <input 
-                          ref={isLastAdded ? lastAddedServiceRef : null}
-                          style={styles.input} 
-                          value={svc.title} 
-                          onChange={(e) => updateService(i, 'title', e.target.value)} 
-                        />
-                      </div>
-                      <div style={styles.field}>
-                        <label style={styles.label}>Subtitle</label>
-                        <input style={styles.input} value={svc.subtitle} onChange={(e) => updateService(i, 'subtitle', e.target.value)} />
-                      </div>
-                    </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-                    <div style={{ marginTop: 10 }}>
-                      <div style={styles.inlineHeader}>
-                        <h5 style={styles.subHeading}>Points</h5>
-                        <button type="button" style={styles.smallBtn} onClick={() => addServiceFeature(i)}>+ Add Point</button>
-                      </div>
-                      {(svc.features || []).map((feat, fIndex) => {
-                        const isLastFeature = fIndex === (svc.features || []).length - 1;
-                        const isLastServiceFeature = isLastFeature && i === lastServiceIndexWithFeature;
-                        return (
-                        <div key={fIndex} style={styles.featureRow}>
-                          <input
-                            ref={isLastServiceFeature ? lastAddedServiceFeatureRef : null}
-                            style={styles.input}
-                            value={feat}
-                            onChange={(e) => updateServiceFeature(i, fIndex, e.target.value)}
-                            placeholder="Feature"
-                          />
-                          <button type="button" style={styles.removeBtn} onClick={() => removeServiceFeature(i, fIndex)}>
-                            <i className="fa-solid fa-xmark" />
-                          </button>
-                        </div>
-                        );
-                      })}
-                    </div>
-
-                    <button type="button" style={styles.removeBtn} onClick={() => removeService(i)}>
-                      <i className="fa-solid fa-trash" /> Remove Service
-                    </button>
+          <TabsContent value="testimonials" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Testimonials Section Settings</CardTitle>
+                <CardDescription>Update the testimonials headline and subtext.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-1">
+                    <Label>Eyebrow</Label>
+                    <Input value={form.testimonialsSection.eyebrow} onChange={(e) => handleSectionChange('testimonialsSection', 'eyebrow', e.target.value)} />
                   </div>
-                  );
-                })}
-                {showMoreServices && services.slice(1).map((svc, i) => {
-                  const index = i + 1;
-                  const isLastAdded = index === services.length - 1;
-                  return (
-                    <div key={`service-card-${index}`} style={styles.cardRow}>
-                      <div style={{ display: 'grid', gridTemplateColumns: '90px 1fr 1fr', gap: 12 }}>
-                        <div style={styles.field}>
-                          <label style={styles.label}>ID</label>
-                          <input style={styles.input} value={svc.id} onChange={(e) => updateService(index, 'id', e.target.value)} />
-                        </div>
-                        <div style={styles.field}>
-                          <label style={styles.label}>Title</label>
-                          <input 
-                            ref={isLastAdded ? lastAddedServiceRef : null}
-                            style={styles.input} 
-                            value={svc.title} 
-                            onChange={(e) => updateService(index, 'title', e.target.value)} 
-                          />
-                        </div>
-                        <div style={styles.field}>
-                          <label style={styles.label}>Subtitle</label>
-                          <input style={styles.input} value={svc.subtitle} onChange={(e) => updateService(index, 'subtitle', e.target.value)} />
-                        </div>
-                      </div>
+                  <div className="space-y-1">
+                    <Label>Title Highlight</Label>
+                    <Input value={form.testimonialsSection.titleHighlight} onChange={(e) => handleSectionChange('testimonialsSection', 'titleHighlight', e.target.value)} />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <Label>Title</Label>
+                  <Input value={form.testimonialsSection.title} onChange={(e) => handleSectionChange('testimonialsSection', 'title', e.target.value)} />
+                </div>
+              </CardContent>
+            </Card>
 
-                      <div style={{ marginTop: 10 }}>
-                        <div style={styles.inlineHeader}>
-                          <h5 style={styles.subHeading}>Points</h5>
-                          <button type="button" style={styles.smallBtn} onClick={() => addServiceFeature(index)}>+ Add Point</button>
-                        </div>
-                        {(svc.features || []).map((feat, fIndex) => (
-                          <div key={fIndex} style={styles.featureRow}>
-                            <input
-                              style={styles.input}
-                              value={feat}
-                              onChange={(e) => updateServiceFeature(index, fIndex, e.target.value)}
-                              placeholder="Feature"
-                            />
-                            <button type="button" style={styles.removeBtn} onClick={() => removeServiceFeature(index, fIndex)}>
-                              <i className="fa-solid fa-xmark" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-
-                      <button type="button" style={styles.removeBtn} onClick={() => removeService(index)}>
-                        <i className="fa-solid fa-trash" /> Remove Service
-                      </button>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Testimonials Section */}
-        <div style={styles.section}>
-          <h3 style={styles.sectionTitle}><i className="fa-solid fa-comments" /> Testimonials Section</h3>
-
-          <div style={styles.field}>
-            <label style={styles.label}>Eyebrow</label>
-            <input style={styles.input} value={form.testimonialsSection.eyebrow} onChange={(e) => handleSectionChange('testimonialsSection', 'eyebrow', e.target.value)} />
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 12 }}>
-            <div style={styles.field}>
-              <label style={styles.label}>Title</label>
-              <input style={styles.input} value={form.testimonialsSection.title} onChange={(e) => handleSectionChange('testimonialsSection', 'title', e.target.value)} />
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Title Highlight</label>
-              <input style={styles.input} value={form.testimonialsSection.titleHighlight} onChange={(e) => handleSectionChange('testimonialsSection', 'titleHighlight', e.target.value)} />
-            </div>
-          </div>
-
-          <div style={{ marginTop: 16 }}>
-            <div style={styles.inlineHeader}>
-              <h4 style={styles.subHeading}>Testimonials</h4>
-              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                {testimonials.length > 1 && (
-                  <button
-                    type="button"
-                    style={styles.smallBtn}
-                    onClick={() => setShowMoreTestimonials((prev) => !prev)}
+            <Card>
+              <CardHeader className="flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Testimonials</CardTitle>
+                  <CardDescription>Collapsible cards keep the list easy to scan.</CardDescription>
+                </div>
+                <Button type="button" size="sm" variant="outline" onClick={addTestimonial}>Add Testimonial</Button>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {testimonials.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-slate-500">No testimonials yet.</div>
+                ) : (
+                  <Accordion
+                    key={testimonialAccordionKey}
+                    type="multiple"
+                    value={testimonialOpenItems}
+                    onValueChange={setTestimonialOpenItems}
+                    className="space-y-2"
                   >
-                    {showMoreTestimonials ? 'Hide extra testimonials' : `View more testimonials (${testimonials.length - 1})`}
-                  </button>
+                    {testimonials.map((item, i) => {
+                      const isLastAdded = i === testimonials.length - 1;
+                      return (
+                        <AccordionItem key={`testimonial-${i}`} value={`testimonial-${i}`}>
+                          <AccordionTrigger>
+                            <span className="text-sm">Testimonial {i + 1}{item.name ? ` · ${item.name}` : ''}</span>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="grid gap-3">
+                              <input type="hidden" value={item.thumb} onChange={(e) => updateTestimonial(i, 'thumb', e.target.value)} />
+                              <div className="space-y-1">
+                                <Label>Quote</Label>
+                                <Textarea
+                                  ref={isLastAdded ? lastAddedTestimonialRef : null}
+                                  rows={3}
+                                  value={item.text}
+                                  onChange={(e) => updateTestimonial(i, 'text', e.target.value)}
+                                />
+                              </div>
+                              <div className="grid gap-3 sm:grid-cols-2">
+                                <div className="space-y-1">
+                                  <Label>Name</Label>
+                                  <Input value={item.name} onChange={(e) => updateTestimonial(i, 'name', e.target.value)} />
+                                </div>
+                                <div className="space-y-1">
+                                  <Label>Role</Label>
+                                  <Input value={item.role} onChange={(e) => updateTestimonial(i, 'role', e.target.value)} />
+                                </div>
+                              </div>
+                              <Button type="button" size="sm" variant="destructive" onClick={() => removeTestimonial(i)}>
+                                Remove Testimonial
+                              </Button>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
                 )}
-                <button type="button" style={styles.smallBtn} onClick={addTestimonial}>+ Add Testimonial</button>
-              </div>
-            </div>
-            {testimonials.length === 0 ? (
-              <div style={styles.empty}>No testimonials yet. Add your first one.</div>
-            ) : (
-              <>
-                {[testimonials[0]].map((item, i) => {
-                  const isLastAdded = testimonials.length === 1;
-                  return (
-                  <div key={`testimonial-${i}`} style={styles.cardRow}>
-                    <div style={styles.field}>
-                      <label style={styles.label}>Quote</label>
-                      <textarea 
-                        ref={isLastAdded ? lastAddedTestimonialRef : null}
-                        style={styles.textarea} 
-                        rows={3} 
-                        value={item.text} 
-                        onChange={(e) => updateTestimonial(i, 'text', e.target.value)} 
-                      />
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                      <div style={styles.field}>
-                        <label style={styles.label}>Name</label>
-                        <input style={styles.input} value={item.name} onChange={(e) => updateTestimonial(i, 'name', e.target.value)} />
-                      </div>
-                      <div style={styles.field}>
-                        <label style={styles.label}>Role</label>
-                        <input style={styles.input} value={item.role} onChange={(e) => updateTestimonial(i, 'role', e.target.value)} />
-                      </div>
-                    </div>
-                    <input type="hidden" value={item.thumb} onChange={(e) => updateTestimonial(i, 'thumb', e.target.value)} />
-                    <button type="button" style={styles.removeBtn} onClick={() => removeTestimonial(i)}>
-                      <i className="fa-solid fa-trash" /> Remove
-                    </button>
-                  </div>
-                  );
-                })}
-                {showMoreTestimonials && testimonials.slice(1).map((item, i) => {
-                  const index = i + 1;
-                  const isLastAdded = index === testimonials.length - 1;
-                  return (
-                    <div key={`testimonial-${index}`} style={styles.cardRow}>
-                      <div style={styles.field}>
-                        <label style={styles.label}>Quote</label>
-                        <textarea 
-                          ref={isLastAdded ? lastAddedTestimonialRef : null}
-                          style={styles.textarea} 
-                          rows={3} 
-                          value={item.text} 
-                          onChange={(e) => updateTestimonial(index, 'text', e.target.value)} 
-                        />
-                      </div>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                        <div style={styles.field}>
-                          <label style={styles.label}>Name</label>
-                          <input style={styles.input} value={item.name} onChange={(e) => updateTestimonial(index, 'name', e.target.value)} />
-                        </div>
-                        <div style={styles.field}>
-                          <label style={styles.label}>Role</label>
-                          <input style={styles.input} value={item.role} onChange={(e) => updateTestimonial(index, 'role', e.target.value)} />
-                        </div>
-                      </div>
-                      <input type="hidden" value={item.thumb} onChange={(e) => updateTestimonial(index, 'thumb', e.target.value)} />
-                      <button type="button" style={styles.removeBtn} onClick={() => removeTestimonial(index)}>
-                        <i className="fa-solid fa-trash" /> Remove
-                      </button>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button type="submit" style={styles.saveBtn} disabled={saving}>
-            {saving ? 'Saving…' : 'Save Changes'}
-          </button>
-        </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </form>
     </div>
   );
 }
 
-const styles = {
-  pageHeader: { marginBottom: 24 },
-  pageTitle: { margin: 0, fontSize: 26, fontWeight: 700, color: '#0F172A' },
-  pageSub: { margin: '4px 0 0', color: '#64748B', fontSize: 14 },
-  loading: { textAlign: 'center', padding: 60, color: '#64748B' },
-  empty: { textAlign: 'center', padding: 40, color: '#64748B' },
-  toast: { background: '#D1FAE5', border: '1px solid #6EE7B7', color: '#065F46', borderRadius: 8, padding: '10px 16px', marginBottom: 20, fontSize: 14 },
-  errBox: { background: '#FEE2E2', border: '1px solid #FCA5A5', color: '#991B1B', borderRadius: 8, padding: '10px 16px', marginBottom: 20, fontSize: 14 },
-  section: { background: '#fff', borderRadius: 12, padding: '24px 28px', marginBottom: 20, border: '1px solid #E2E8F0' },
-  sectionTitle: { margin: '0 0 20px', fontSize: 15, fontWeight: 700, color: '#334155', display: 'flex', alignItems: 'center', gap: 8 },
-  field: { marginBottom: 12 },
-  label: { display: 'block', marginBottom: 6, fontWeight: 600, fontSize: 13, color: '#374151' },
-  input: { width: '100%', boxSizing: 'border-box', padding: '10px 12px', border: '1px solid #D1D5DB', borderRadius: 8, fontSize: 14, outline: 'none', color: '#111' },
-  textarea: { width: '100%', boxSizing: 'border-box', padding: '10px 12px', border: '1px solid #D1D5DB', borderRadius: 8, fontSize: 14, outline: 'none', color: '#111', resize: 'vertical' },
-  cardRow: { border: '1px solid #E2E8F0', borderRadius: 10, padding: 16, marginBottom: 14, background: '#F8FAFC' },
-  inlineHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
-  subHeading: { margin: 0, fontSize: 13, fontWeight: 700, color: '#475569' },
-  smallBtn: { padding: '6px 12px', background: '#EFF6FF', color: '#3B82F6', border: '1px solid #BFDBFE', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6 },
-  removeBtn: { marginTop: 10, padding: '6px 12px', background: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 },
-  featureRow: { display: 'grid', gridTemplateColumns: '1fr auto', gap: 10, alignItems: 'center', marginBottom: 8 },
-  saveBtn: { padding: '12px 28px', background: '#3B82F6', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: 'pointer' },
-  slideGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 },
-  slideCard: { background: '#fff', borderRadius: 10, overflow: 'hidden', border: '1px solid #E2E8F0', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' },
-  slideBg: { height: 140, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative' },
-  slideBody: { padding: '14px 16px 16px' },
-  slideTitle: { margin: '0 0 8px', fontSize: 14, fontWeight: 700, color: '#0F172A' },
-  slideText: { margin: '0 0 12px', fontSize: 12, color: '#64748B', lineHeight: 1.5 },
-  slideActions: { display: 'flex', gap: 8, flexWrap: 'wrap' },
-  editBtn: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#EFF6FF', color: '#3B82F6', border: '1px solid #BFDBFE', borderRadius: 6, fontSize: 12, fontWeight: 600, textDecoration: 'none' },
-  toggleBtn: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#FFF7ED', color: '#D97706', border: '1px solid #FDE68A', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
-  delBtn: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 12px', background: '#FEF2F2', color: '#EF4444', border: '1px solid #FECACA', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' },
-  orderBadge: { position: 'absolute', top: 10, left: 10, background: 'rgba(0,0,0,0.5)', color: '#fff', borderRadius: 6, padding: '4px 8px', fontSize: 11, fontWeight: 700 },
-  activeBadge: { position: 'absolute', top: 10, right: 10, color: '#fff', borderRadius: 6, padding: '4px 8px', fontSize: 11, fontWeight: 700 },
-};
+function shiftOpenItems(items, removedIndex, prefix) {
+  return items
+    .map((value) => {
+      if (!value.startsWith(`${prefix}-`)) return value;
+      const index = Number(value.slice(prefix.length + 1));
+      if (Number.isNaN(index)) return null;
+      if (index === removedIndex) return null;
+      if (index > removedIndex) return `${prefix}-${index - 1}`;
+      return value;
+    })
+    .filter(Boolean);
+}
