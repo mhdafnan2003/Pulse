@@ -30,6 +30,9 @@ export default function AdminLayout() {
           <SideLink to="/admin/home-content" label="Homepage Content" icon="fa-solid fa-pen-to-square" active={isActive('/admin/home-content')} />
           <SideLink to="/admin/service-content" label="Service Page Content" icon="fa-solid fa-list-check" active={isActive('/admin/service-content')} />
           <SideLink to="/admin/contact-content" label="Contact Page Content" icon="fa-solid fa-address-book" active={isActive('/admin/contact-content')} />
+          <SideLink to="/admin/about-content" label="About Page Content" icon="fa-solid fa-circle-info" active={isActive('/admin/about-content')} />
+          <SideLink to="/admin/apply-now-content" label="Apply Now Content" icon="fa-solid fa-clipboard-check" active={isActive('/admin/apply-now-content')} />
+          <SideLink to="/admin/applications" label="Applications" icon="fa-solid fa-file-lines" active={isActive('/admin/applications')} />
           <div style={{ borderTop: '1px solid #1E3A5F', margin: '24px 0' }} />
           <a href="/" target="_blank" style={styles.sidelink}>
             <i className="fa-solid fa-arrow-up-right-from-square" style={{ width: 20 }} />

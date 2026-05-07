@@ -146,18 +146,52 @@ export default function Navbar() {
                   </div>
                 </li>
               </ul>
-              <Link to="/contact" className="theme-btn mt-4" onClick={() => setOffcanvasOpen(false)}>
-                <div className="btn_inner">
-                  <div className="btn_icon">
-                    <span>
-                      <i className="fa-solid fa-arrow-up-right"></i>
-                      <i className="fa-solid fa-arrow-up-right"></i>
-                    </span>
-                  </div>
-                  <div className="btn_text">
-                    <span>Contact us</span>
-                  </div>
-                </div>
+              <Link to="/apply-now" className="d-flex align-items-center justify-content-center gap-2 mt-4" 
+                style={{
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2563eb';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+                onClick={() => setOffcanvasOpen(false)}
+              >
+                <i className="fa-solid fa-file-circle-check" style={{ fontSize: '16px' }}></i>
+                <span>Apply Now</span>
+              </Link>
+              <Link to="/contact" className="d-flex align-items-center justify-content-center gap-2 mt-3" 
+                style={{
+                  backgroundColor: '#10b981',
+                  color: '#ffffff',
+                  padding: '10px 20px',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#059669';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#10b981';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+                onClick={() => setOffcanvasOpen(false)}
+              >
+                <span>Contact Us</span>
               </Link>
               <div className="social-icon d-flex align-items-center">
                 <a href="https://wa.me/447956273533" target="_blank" rel="noreferrer"><i className="fab fa-whatsapp"></i></a>
@@ -206,17 +240,25 @@ export default function Navbar() {
               <button type="button" className="main-header__search search-toggler d-xxl-none" onClick={() => setSearchOpen(true)}>
                 <i className="fa-regular fa-magnifying-glass"></i>
               </button>
-              <a href="tel:+447956273533" className="theme-btn d-none d-xxl-block">
-                <div className="btn_inner">
-                  <div className="btn_icon">
-                    <span>
-                      <img src="/assets/img/call.svg" alt="" />
-                      <img src="/assets/img/call.svg" alt="" />
-                    </span>
-                  </div>
-                  <div className="btn_text"><span>+44 7956 273533</span></div>
-                </div>
-              </a>
+              {location.pathname !== '/apply-now' && (
+                <Link to="/apply-now" className="d-none d-xxl-block" style={{
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  padding: '8px 20px',
+                  marginRight: '16px',
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  textDecoration: 'none',
+                  display: 'inline-block',
+                  transition: 'background-color 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#1d4ed8'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#2563eb'}
+                >
+                  Apply Now
+                </Link>
+              )}
 
               {/* Mobile hamburger */}
               <div className="header__hamburger d-xl-none my-auto">

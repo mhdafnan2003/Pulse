@@ -17,7 +17,7 @@ export default function AdminLogin() {
       const res = await authApi.login(username, password);
       localStorage.setItem('adminToken', res.data.token);
       localStorage.setItem('adminUser', res.data.username);
-      navigate('/admin/slides');
+      navigate('/admin/home-content');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {

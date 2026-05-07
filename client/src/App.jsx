@@ -3,6 +3,8 @@ import { SlidesProvider } from './context/SlidesContext';
 import { HomeContentProvider } from './context/HomeContentContext';
 import { ServiceContentProvider } from './context/ServiceContentContext';
 import { ContactContentProvider } from './context/ContactContentContext';
+import { AboutContentProvider } from './context/AboutContentContext';
+import { ApplyNowContentProvider } from './context/ApplyNowContentContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
@@ -13,11 +15,15 @@ import SlideForm from './admin/SlideForm';
 import HomeContentForm from './admin/HomeContentForm';
 import ServicePageContentForm from './admin/ServicePageContentForm';
 import ContactContentForm from './admin/ContactContentForm';
+import ApplicationsManager from './admin/ApplicationsManager';
+import AboutContentForm from './admin/AboutContentForm';
+import ApplyNowContentForm from './admin/ApplyNowContentForm';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import ContactModal from './components/ContactModal';
 import SiteChrome from './components/SiteChrome';
 import AboutPage from './pages/AboutPage';
+import ApplyNowPage from './pages/ApplyNowPage';
 import ServicePage from './pages/ServicePage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
@@ -47,12 +53,15 @@ export default function App() {
       <HomeContentProvider>
         <ServiceContentProvider>
           <ContactContentProvider>
-            <BrowserRouter>
-              <ScrollToTop />
-              <Routes>
+            <AboutContentProvider>
+              <ApplyNowContentProvider>
+                <BrowserRouter>
+                  <ScrollToTop />
+                  <Routes>
           {/* Public site */}
           <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
           <Route path="/about" element={<PublicLayout><AboutPage /></PublicLayout>} />
+          <Route path="/apply-now" element={<PublicLayout><ApplyNowPage /></PublicLayout>} />
           <Route path="/service" element={<PublicLayout><ServicePage /></PublicLayout>} />
           <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
           <Route path="/privacy-policy" element={<PublicLayout><PrivacyPolicyPage /></PublicLayout>} />
@@ -68,19 +77,24 @@ export default function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Navigate to="/admin/slides" replace />} />
+            <Route index element={<Navigate to="/admin/home-content" replace />} />
             <Route path="slides" element={<SlideManager />} />
             <Route path="slides/new" element={<SlideForm />} />
             <Route path="slides/:id/edit" element={<SlideForm />} />
             <Route path="home-content" element={<HomeContentForm />} />
             <Route path="service-content" element={<ServicePageContentForm />} />
             <Route path="contact-content" element={<ContactContentForm />} />
+            <Route path="about-content" element={<AboutContentForm />} />
+            <Route path="apply-now-content" element={<ApplyNowContentForm />} />
+            <Route path="applications" element={<ApplicationsManager />} />
           </Route>
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </BrowserRouter>
+                  </Routes>
+                </BrowserRouter>
+              </ApplyNowContentProvider>
+            </AboutContentProvider>
           </ContactContentProvider>
         </ServiceContentProvider>
       </HomeContentProvider>

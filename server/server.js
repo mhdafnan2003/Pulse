@@ -27,6 +27,9 @@ app.use('/api/home-content', require('./routes/homeContent'));
 app.use('/api/service-content', require('./routes/servicePageContent'));
 app.use('/api/contact-content', require('./routes/contactContent'));
 app.use('/api/upload', require('./routes/upload'));
+app.use('/api/applications', require('./routes/applications'));
+app.use('/api/about-content', require('./routes/aboutContent'));
+app.use('/api/apply-now-content', require('./routes/applyNowContent'));
  
  // Root route
  app.get('/', (req, res) => {

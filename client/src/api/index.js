@@ -35,6 +35,18 @@ export const contactContentApi = {
   update: (data) => api.put('/contact-content', data),
 };
 
+export const aboutContentApi = {
+  getPublic: () => api.get('/about-content'),
+  getAdmin: () => api.get('/about-content/admin'),
+  update: (data) => api.put('/about-content', data),
+};
+
+export const applyNowContentApi = {
+  getPublic: () => api.get('/apply-now-content'),
+  getAdmin: () => api.get('/apply-now-content/admin'),
+  update: (data) => api.put('/apply-now-content', data),
+};
+
 export const uploadApi = {
   uploadImage: (file) => {
     const form = new FormData();
