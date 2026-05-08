@@ -89,13 +89,12 @@ export default function ServicePageContentForm() {
   };
 
   const addService = () => {
-    const nextIndex = form.services.length;
     focusNewServiceRef.current = true;
     setForm((prev) => ({
       ...prev,
       services: [...prev.services, newService(prev.services.length)],
     }));
-    setServiceOpenItems((prev) => Array.from(new Set([...prev, `service-${nextIndex}`])));
+    setServiceOpenItems((prev) => Array.from(new Set([...prev, 'service-0'])));
   };
 
   const removeService = (index) => {
@@ -195,32 +194,33 @@ export default function ServicePageContentForm() {
                 onValueChange={setServiceOpenItems}
                 className="space-y-2"
               >
-                {services.map((svc, i) => {
-                  const isLastAdded = i === services.length - 1;
+                {[...services].reverse().map((svc, i) => {
+                  const isNew = i === 0 && focusNewServiceRef.current;
+                  const originalIndex = services.length - 1 - i;
                   const points = svc.features || [];
                   return (
-                    <AccordionItem key={`service-${i}`} value={`service-${i}`}>
+                    <AccordionItem key={`service-${originalIndex}`} value={`service-${i}`}>
                       <AccordionTrigger>
-                        <span className="text-sm">Service {i + 1}{svc.title ? ` · ${svc.title}` : ''}</span>
+                        <span className="text-sm">Service {services.length - i}{svc.title ? ` · ${svc.title}` : ''}</span>
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="grid gap-4">
                           <div className="grid gap-3 sm:grid-cols-[90px,1fr,1fr]">
                             <div className="space-y-1">
                               <Label>ID</Label>
-                              <Input value={svc.id} onChange={(e) => updateService(i, 'id', e.target.value)} />
+                              <Input value={svc.id} onChange={(e) => updateService(originalIndex, 'id', e.target.value)} />
                             </div>
                             <div className="space-y-1">
                               <Label>Title</Label>
                               <Input
-                                ref={isLastAdded ? lastAddedServiceRef : null}
+                                ref={isNew ? lastAddedServiceRef : null}
                                 value={svc.title}
-                                onChange={(e) => updateService(i, 'title', e.target.value)}
+                                onChange={(e) => updateService(originalIndex, 'title', e.target.value)}
                               />
                             </div>
                             <div className="space-y-1">
                               <Label>Subtitle</Label>
-                              <Input value={svc.subtitle} onChange={(e) => updateService(i, 'subtitle', e.target.value)} />
+                              <Input value={svc.subtitle} onChange={(e) => updateService(originalIndex, 'subtitle', e.target.value)} />
                             </div>
                           </div>
 
@@ -229,7 +229,7 @@ export default function ServicePageContentForm() {
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               <Label>Points</Label>
-                              <Button type="button" size="sm" variant="secondary" onClick={() => addServiceFeature(i)}>
+                              <Button type="button" size="sm" variant="secondary" onClick={() => addServiceFeature(originalIndex)}>
                                 Add Point
                               </Button>
                             </div>
@@ -244,10 +244,10 @@ export default function ServicePageContentForm() {
                                       <Input
                                         ref={isLastFeature ? lastAddedServiceFeatureRef : null}
                                         value={feat}
-                                        onChange={(e) => updateServiceFeature(i, fIndex, e.target.value)}
+                                        onChange={(e) => updateServiceFeature(originalIndex, fIndex, e.target.value)}
                                         placeholder="Point"
                                       />
-                                      <Button type="button" size="icon" variant="ghost" onClick={() => removeServiceFeature(i, fIndex)}>
+                                      <Button type="button" size="icon" variant="ghost" onClick={() => removeServiceFeature(originalIndex, fIndex)}>
                                         <i className="fa-solid fa-xmark" />
                                       </Button>
                                     </div>
@@ -257,7 +257,7 @@ export default function ServicePageContentForm() {
                             </div>
                           </div>
 
-                          <Button type="button" size="sm" variant="destructive" onClick={() => removeService(i)}>
+                          <Button type="button" size="sm" variant="destructive" onClick={() => removeService(originalIndex)}>
                             Remove Service
                           </Button>
                         </div>

@@ -11,6 +11,45 @@ export default function ApplyNowPage() {
   const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
   const { applyNowContent, fetchApplyNowContent } = useApplyNowContent();
   const inputRefs = useRef({});
+  const formRef = useRef(null);
+  const sidebarRef = useRef(null);
+  const additionalDocsRef = useRef(null);
+
+  // JS-based sticky sidebar — stops when sidebar bottom meets Additional Documents card bottom
+  useEffect(() => {
+    const TOP_OFFSET = 110; // px below viewport top
+    const onScroll = () => {
+      const sidebar = sidebarRef.current;
+      const form = formRef.current;
+      const addDocs = additionalDocsRef.current;
+      if (!sidebar) return;
+      // Only sticky on large screens where the 2-col grid is active
+      if (window.innerWidth < 1024) {
+        sidebar.style.transform = 'none';
+        return;
+      }
+      if (!form) return;
+      const formRect = form.getBoundingClientRect();
+      const sidebarHeight = sidebar.offsetHeight;
+      const scrolled = -formRect.top + TOP_OFFSET;
+      // Max scroll: sidebar bottom aligns with Additional Documents card bottom
+      let maxScroll;
+      if (addDocs) {
+        const addDocsBottom = addDocs.getBoundingClientRect().bottom;
+        maxScroll = addDocsBottom - formRect.top - sidebarHeight;
+      } else {
+        maxScroll = formRect.height - sidebarHeight - 32;
+      }
+      const translate = Math.max(0, Math.min(scrolled, maxScroll));
+      sidebar.style.transform = `translateY(${translate}px)`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
   
   // Get dynamic fields from database
   const basicFields = applyNowContent?.basicBlock?.fields || [];
@@ -273,7 +312,7 @@ export default function ApplyNowPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <form ref={formRef} onSubmit={handleSubmit} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
             {/* Left Column - Form Sections */}
             <div className="space-y-6">
               {/* Basic Details Section */}
@@ -347,7 +386,7 @@ export default function ApplyNowPage() {
               </div>
 
               {/* Additional Documents Section */}
-              <div className="rounded-lg border border-slate-200 bg-white p-6">
+              <div ref={additionalDocsRef} className="rounded-lg border border-slate-200 bg-white p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <i className="fa-solid fa-circle-plus text-slate-700"></i>
                   <h2 className="text-base font-semibold text-slate-900">{applyNowContent?.additionalDocsBlock?.title || "Additional Documents"}</h2>
@@ -374,7 +413,7 @@ export default function ApplyNowPage() {
             </div>
 
             {/* Right Column - Progress & Support */}
-            <div>
+            <div ref={sidebarRef}>
               <ProgressTracker
                 basicFields={basicFields}
                 requiredDocs={requiredDocuments}

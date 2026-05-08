@@ -65,12 +65,11 @@ export default function AboutContentForm() {
   };
 
   const addSection = () => {
-    const nextIndex = form.sections.length;
     setForm((prev) => ({
       ...prev,
       sections: [...(prev.sections || []), { ...newSection }],
     }));
-    setOpenItems((prev) => Array.from(new Set([...prev, `section-${nextIndex}`])));
+    setOpenItems((prev) => Array.from(new Set([...prev, 'section-0'])));
   };
 
   const removeSection = (index) => {
@@ -78,7 +77,7 @@ export default function AboutContentForm() {
       ...prev,
       sections: (prev.sections || []).filter((_, i) => i !== index),
     }));
-    setOpenItems((prev) => prev.filter((item) => item !== `section-${index}`));
+    setOpenItems((prev) => shiftOpenItems(prev, index, 'section'));
   };
 
   const handleSave = async (event) => {
@@ -157,38 +156,41 @@ export default function AboutContentForm() {
                 onValueChange={setOpenItems}
                 className="space-y-2"
               >
-                {(form.sections || []).map((section, index) => (
-                  <AccordionItem key={`section-${index}`} value={`section-${index}`}>
-                    <AccordionTrigger>
-                      <span className="text-sm">Section {index + 1}{section.title ? ` · ${section.title}` : ''}</span>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="grid gap-4">
-                        <div className="grid gap-3 md:grid-cols-2">
-                          <div className="space-y-1">
-                            <Label>Title</Label>
-                            <Input value={section.title} onChange={(e) => updateSection(index, 'title', e.target.value)} className={inputClass} />
+                {[...(form.sections || [])].reverse().map((section, i) => {
+                  const originalIndex = (form.sections || []).length - 1 - i;
+                  return (
+                    <AccordionItem key={`section-${originalIndex}`} value={`section-${i}`}>
+                      <AccordionTrigger>
+                        <span className="text-sm">Section {(form.sections || []).length - i}{section.title ? ` · ${section.title}` : ''}</span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="grid gap-4">
+                          <div className="grid gap-3 md:grid-cols-2">
+                            <div className="space-y-1">
+                              <Label>Title</Label>
+                              <Input value={section.title} onChange={(e) => updateSection(originalIndex, 'title', e.target.value)} className={inputClass} />
+                            </div>
+                            <div className="space-y-1 md:col-span-2">
+                              <Label>Lead</Label>
+                              <Textarea value={section.lead} onChange={(e) => updateSection(originalIndex, 'lead', e.target.value)} className={textareaClass} />
+                            </div>
+                            <div className="space-y-1 md:col-span-2">
+                              <Label>Body</Label>
+                              <Textarea value={section.body} onChange={(e) => updateSection(originalIndex, 'body', e.target.value)} className={textareaClass} />
+                            </div>
+                            <div className="space-y-1 md:col-span-2">
+                              <Label>Highlight Text</Label>
+                              <Input value={section.highlightText} onChange={(e) => updateSection(originalIndex, 'highlightText', e.target.value)} className={inputClass} />
+                            </div>
                           </div>
-                          <div className="space-y-1 md:col-span-2">
-                            <Label>Lead</Label>
-                            <Textarea value={section.lead} onChange={(e) => updateSection(index, 'lead', e.target.value)} className={textareaClass} />
-                          </div>
-                          <div className="space-y-1 md:col-span-2">
-                            <Label>Body</Label>
-                            <Textarea value={section.body} onChange={(e) => updateSection(index, 'body', e.target.value)} className={textareaClass} />
-                          </div>
-                          <div className="space-y-1 md:col-span-2">
-                            <Label>Highlight Text</Label>
-                            <Input value={section.highlightText} onChange={(e) => updateSection(index, 'highlightText', e.target.value)} className={inputClass} />
-                          </div>
+                          <Button type="button" size="sm" variant="destructive" onClick={() => removeSection(originalIndex)}>
+                            Remove Section
+                          </Button>
                         </div>
-                        <Button type="button" size="sm" variant="destructive" onClick={() => removeSection(index)}>
-                          Remove Section
-                        </Button>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
               </Accordion>
             )}
           </CardContent>
@@ -196,4 +198,17 @@ export default function AboutContentForm() {
       </form>
     </div>
   );
+}
+
+function shiftOpenItems(items, removedIndex, prefix) {
+  return items
+    .map((value) => {
+      if (!value.startsWith(`${prefix}-`)) return value;
+      const index = Number(value.slice(prefix.length + 1));
+      if (Number.isNaN(index)) return null;
+      if (index === removedIndex) return null;
+      if (index > removedIndex) return `${prefix}-${index - 1}`;
+      return value;
+    })
+    .filter(Boolean);
 }

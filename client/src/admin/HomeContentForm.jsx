@@ -210,7 +210,6 @@ export default function HomeContentForm() {
   };
 
   const addReasonCard = () => {
-    const nextIndex = reasonCards.length;
     setForm((prev) => ({
       ...prev,
       reasonSection: {
@@ -218,7 +217,7 @@ export default function HomeContentForm() {
         cards: [...prev.reasonSection.cards, { ...newReasonCard }],
       },
     }));
-    setReasonOpenItems((prev) => Array.from(new Set([...prev, `reason-${nextIndex}`])));
+    setReasonOpenItems((prev) => Array.from(new Set([...prev, 'reason-0'])));
   };
 
   const removeReasonCard = (index) => {
@@ -244,7 +243,6 @@ export default function HomeContentForm() {
   };
 
   const addService = () => {
-    const nextIndex = services.length;
     setForm((prev) => ({
       ...prev,
       servicesSection: {
@@ -252,7 +250,7 @@ export default function HomeContentForm() {
         services: [...prev.servicesSection.services, newService(prev.servicesSection.services.length)],
       },
     }));
-    setServiceOpenItems((prev) => Array.from(new Set([...prev, `service-${nextIndex}`])));
+    setServiceOpenItems((prev) => Array.from(new Set([...prev, 'service-0'])));
   };
 
   const removeService = (index) => {
@@ -318,7 +316,6 @@ export default function HomeContentForm() {
   };
 
   const addTestimonial = () => {
-    const nextIndex = testimonials.length;
     setForm((prev) => ({
       ...prev,
       testimonialsSection: {
@@ -326,7 +323,7 @@ export default function HomeContentForm() {
         items: [...prev.testimonialsSection.items, { ...newTestimonial }],
       },
     }));
-    setTestimonialOpenItems((prev) => Array.from(new Set([...prev, `testimonial-${nextIndex}`])));
+    setTestimonialOpenItems((prev) => Array.from(new Set([...prev, 'testimonial-0'])));
   };
 
   const removeTestimonial = (index) => {
@@ -507,29 +504,30 @@ export default function HomeContentForm() {
                     onValueChange={setReasonOpenItems}
                     className="space-y-2"
                   >
-                    {reasonCards.map((card, i) => {
-                      const isLastAdded = i === reasonCards.length - 1;
+                    {[...reasonCards].reverse().map((card, i) => {
+                      const isNew = i === 0 && lastAddedReasonCardRef.current;
+                      const originalIndex = reasonCards.length - 1 - i;
                       return (
-                        <AccordionItem key={`reason-${i}`} value={`reason-${i}`}>
+                        <AccordionItem key={`reason-${originalIndex}`} value={`reason-${i}`}>
                           <AccordionTrigger>
-                            <span className="text-sm">Card {i + 1}{card.title ? ` · ${card.title}` : ''}</span>
+                            <span className="text-sm">Card {reasonCards.length - i}{card.title ? ` · ${card.title}` : ''}</span>
                           </AccordionTrigger>
                           <AccordionContent>
                             <div className="grid gap-3">
-                              <input type="hidden" value={card.icon} onChange={(e) => updateReasonCard(i, 'icon', e.target.value)} />
+                              <input type="hidden" value={card.icon} onChange={(e) => updateReasonCard(originalIndex, 'icon', e.target.value)} />
                               <div className="space-y-1">
                                 <Label>Title</Label>
                                 <Input
-                                  ref={isLastAdded ? lastAddedReasonCardRef : null}
+                                  ref={isNew ? lastAddedReasonCardRef : null}
                                   value={card.title}
-                                  onChange={(e) => updateReasonCard(i, 'title', e.target.value)}
+                                  onChange={(e) => updateReasonCard(originalIndex, 'title', e.target.value)}
                                 />
                               </div>
                               <div className="space-y-1">
                                 <Label>Description</Label>
-                                <Textarea rows={2} value={card.desc} onChange={(e) => updateReasonCard(i, 'desc', e.target.value)} />
+                                <Textarea rows={2} value={card.desc} onChange={(e) => updateReasonCard(originalIndex, 'desc', e.target.value)} />
                               </div>
-                              <Button type="button" size="sm" variant="destructive" onClick={() => removeReasonCard(i)}>
+                              <Button type="button" size="sm" variant="destructive" onClick={() => removeReasonCard(originalIndex)}>
                                 Remove Card
                               </Button>
                             </div>
@@ -586,32 +584,33 @@ export default function HomeContentForm() {
                     onValueChange={setServiceOpenItems}
                     className="space-y-2"
                   >
-                    {services.map((svc, i) => {
-                      const isLastAdded = i === services.length - 1;
+                    {[...services].reverse().map((svc, i) => {
+                      const isNew = i === 0 && lastAddedServiceRef.current;
+                      const originalIndex = services.length - 1 - i;
                       const points = svc.features || [];
                       return (
-                        <AccordionItem key={`service-${i}`} value={`service-${i}`}>
+                        <AccordionItem key={`service-${originalIndex}`} value={`service-${i}`}>
                           <AccordionTrigger>
-                            <span className="text-sm">Service {i + 1}{svc.title ? ` · ${svc.title}` : ''}</span>
+                            <span className="text-sm">Service {services.length - i}{svc.title ? ` · ${svc.title}` : ''}</span>
                           </AccordionTrigger>
                           <AccordionContent>
                             <div className="grid gap-4">
                               <div className="grid gap-3 sm:grid-cols-[90px,1fr,1fr]">
                                 <div className="space-y-1">
                                   <Label>ID</Label>
-                                  <Input value={svc.id} onChange={(e) => updateService(i, 'id', e.target.value)} />
+                                  <Input value={svc.id} onChange={(e) => updateService(originalIndex, 'id', e.target.value)} />
                                 </div>
                                 <div className="space-y-1">
                                   <Label>Title</Label>
                                   <Input
-                                    ref={isLastAdded ? lastAddedServiceRef : null}
+                                    ref={isNew ? lastAddedServiceRef : null}
                                     value={svc.title}
-                                    onChange={(e) => updateService(i, 'title', e.target.value)}
+                                    onChange={(e) => updateService(originalIndex, 'title', e.target.value)}
                                   />
                                 </div>
                                 <div className="space-y-1">
                                   <Label>Subtitle</Label>
-                                  <Input value={svc.subtitle} onChange={(e) => updateService(i, 'subtitle', e.target.value)} />
+                                  <Input value={svc.subtitle} onChange={(e) => updateService(originalIndex, 'subtitle', e.target.value)} />
                                 </div>
                               </div>
 
@@ -620,7 +619,7 @@ export default function HomeContentForm() {
                               <div className="space-y-2">
                                 <div className="flex items-center justify-between">
                                   <Label>Points</Label>
-                                  <Button type="button" size="sm" variant="secondary" onClick={() => addServiceFeature(i)}>
+                                  <Button type="button" size="sm" variant="secondary" onClick={() => addServiceFeature(originalIndex)}>
                                     Add Point
                                   </Button>
                                 </div>
@@ -630,16 +629,16 @@ export default function HomeContentForm() {
                                   ) : (
                                     points.map((feat, fIndex) => {
                                       const isLastFeature = fIndex === points.length - 1;
-                                      const isLastServiceFeature = isLastFeature && i === lastServiceIndexWithFeature;
+                                      const isLastServiceFeature = isLastFeature && originalIndex === lastServiceIndexWithFeature;
                                       return (
                                         <div key={fIndex} className="flex items-center gap-2">
                                           <Input
                                             ref={isLastServiceFeature ? lastAddedServiceFeatureRef : null}
                                             value={feat}
-                                            onChange={(e) => updateServiceFeature(i, fIndex, e.target.value)}
+                                            onChange={(e) => updateServiceFeature(originalIndex, fIndex, e.target.value)}
                                             placeholder="Point"
                                           />
-                                          <Button type="button" size="icon" variant="ghost" onClick={() => removeServiceFeature(i, fIndex)}>
+                                          <Button type="button" size="icon" variant="ghost" onClick={() => removeServiceFeature(originalIndex, fIndex)}>
                                             <i className="fa-solid fa-xmark" />
                                           </Button>
                                         </div>
@@ -649,7 +648,7 @@ export default function HomeContentForm() {
                                 </div>
                               </div>
 
-                              <Button type="button" size="sm" variant="destructive" onClick={() => removeService(i)}>
+                              <Button type="button" size="sm" variant="destructive" onClick={() => removeService(originalIndex)}>
                                 Remove Service
                               </Button>
                             </div>
@@ -706,36 +705,37 @@ export default function HomeContentForm() {
                     onValueChange={setTestimonialOpenItems}
                     className="space-y-2"
                   >
-                    {testimonials.map((item, i) => {
-                      const isLastAdded = i === testimonials.length - 1;
+                    {[...testimonials].reverse().map((item, i) => {
+                      const isNew = i === 0 && lastAddedTestimonialRef.current;
+                      const originalIndex = testimonials.length - 1 - i;
                       return (
-                        <AccordionItem key={`testimonial-${i}`} value={`testimonial-${i}`}>
+                        <AccordionItem key={`testimonial-${originalIndex}`} value={`testimonial-${i}`}>
                           <AccordionTrigger>
-                            <span className="text-sm">Testimonial {i + 1}{item.name ? ` · ${item.name}` : ''}</span>
+                            <span className="text-sm">Testimonial {testimonials.length - i}{item.name ? ` · ${item.name}` : ''}</span>
                           </AccordionTrigger>
                           <AccordionContent>
                             <div className="grid gap-3">
-                              <input type="hidden" value={item.thumb} onChange={(e) => updateTestimonial(i, 'thumb', e.target.value)} />
+                              <input type="hidden" value={item.thumb} onChange={(e) => updateTestimonial(originalIndex, 'thumb', e.target.value)} />
                               <div className="space-y-1">
                                 <Label>Quote</Label>
                                 <Textarea
-                                  ref={isLastAdded ? lastAddedTestimonialRef : null}
+                                  ref={isNew ? lastAddedTestimonialRef : null}
                                   rows={3}
                                   value={item.text}
-                                  onChange={(e) => updateTestimonial(i, 'text', e.target.value)}
+                                  onChange={(e) => updateTestimonial(originalIndex, 'text', e.target.value)}
                                 />
                               </div>
                               <div className="grid gap-3 sm:grid-cols-2">
                                 <div className="space-y-1">
                                   <Label>Name</Label>
-                                  <Input value={item.name} onChange={(e) => updateTestimonial(i, 'name', e.target.value)} />
+                                  <Input value={item.name} onChange={(e) => updateTestimonial(originalIndex, 'name', e.target.value)} />
                                 </div>
                                 <div className="space-y-1">
                                   <Label>Role</Label>
-                                  <Input value={item.role} onChange={(e) => updateTestimonial(i, 'role', e.target.value)} />
+                                  <Input value={item.role} onChange={(e) => updateTestimonial(originalIndex, 'role', e.target.value)} />
                                 </div>
                               </div>
-                              <Button type="button" size="sm" variant="destructive" onClick={() => removeTestimonial(i)}>
+                              <Button type="button" size="sm" variant="destructive" onClick={() => removeTestimonial(originalIndex)}>
                                 Remove Testimonial
                               </Button>
                             </div>
