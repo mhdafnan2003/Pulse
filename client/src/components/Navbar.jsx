@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import logoMain from '../assets/logo-main.png';
-import logoMob from '../assets/logo-mob.png';
 
 export default function Navbar() {
   const location = useLocation();
+  const logoSrc = '/assets/img/logonw.png';
   const [sticky, setSticky] = useState(false);
   const [offcanvasOpen, setOffcanvasOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -83,7 +82,7 @@ export default function Navbar() {
             <div className="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
               <div className="offcanvas__logo">
                 <Link to="/">
-                  <img src={logoMob} alt="Pulse Creative & Consulting Ltd" />
+                  <img src={logoSrc} alt="Pulse Creative & Consulting Ltd" />
                 </Link>
               </div>
               <div className="offcanvas__close">
@@ -177,8 +176,8 @@ export default function Navbar() {
         <div className="mega-menu-wrapper">
           <div className="header-main">
             <Link to="/" className="logo">
-              <img src={logoMain} alt="Pulse Creative & Consulting Ltd" className="d-none d-md-block" />
-              <img src={logoMob} alt="Pulse Creative & Consulting Ltd" className="d-block d-md-none" />
+              <img src={logoSrc} alt="Pulse Creative & Consulting Ltd" className="d-none d-md-block" />
+              <img src={logoSrc} alt="Pulse Creative & Consulting Ltd" className="d-block d-md-none" />
             </Link>
 
             <div className="mean__menu-wrapper">

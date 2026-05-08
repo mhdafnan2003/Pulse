@@ -21,7 +21,7 @@ export default function Footer() {
                 <div className="footer-widget-items">
                   <div className="widget-head">
                     <Link to="/" className="footer-logo">
-                      <img src="/assets/img/logo-main.png" alt="Pulse Creative & Consulting Ltd" />
+                      <img src="/assets/img/logonw.png" alt="Pulse Creative & Consulting Ltd" />
                     </Link>
                   </div>
                   <div className="footer-content">
