@@ -52,7 +52,17 @@ export default function ApplicationsManager() {
     return "default";
   };
 
-  const [searchDate, setSearchDate] = useState(new Date().toISOString().split('T')[0]);
+  // Returns YYYY-MM-DD in local timezone (toISOString uses UTC which can give wrong date in IST etc.)
+  const localDateStr = (date = new Date()) => {
+    const d = new Date(date);
+    return [
+      d.getFullYear(),
+      String(d.getMonth() + 1).padStart(2, '0'),
+      String(d.getDate()).padStart(2, '0'),
+    ].join('-');
+  };
+
+  const [searchDate, setSearchDate] = useState("");
   const [searchStatus, setSearchStatus] = useState("all");
 
   const filteredApplications = applications.filter((app) => {
@@ -67,7 +77,7 @@ export default function ApplicationsManager() {
     // Date filter
     let matchesDate = true;
     if (searchDate && app.createdAt) {
-      const appDate = new Date(app.createdAt).toISOString().split('T')[0];
+      const appDate = localDateStr(new Date(app.createdAt));
       matchesDate = appDate === searchDate;
     }
 
@@ -213,7 +223,7 @@ export default function ApplicationsManager() {
             <p className="text-sm text-slate-500 py-8 text-center">No applications match your search.</p>
           ) : (
             <div className="space-y-3">
-              {(searchQuery || searchDate !== new Date().toISOString().split('T')[0] || searchStatus !== 'all') && (
+              {(searchQuery || searchDate !== "" || searchStatus !== 'all') && (
                 <p className="text-xs text-slate-500">
                   Showing {filteredApplications.length} of {applications.length} application{applications.length !== 1 ? 's' : ''}
                 </p>
