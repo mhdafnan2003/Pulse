@@ -74,6 +74,50 @@ export default function Navbar() {
             display: none !important;
           }
         }
+        .header-1 {
+          padding-top: 5px !important;
+          padding-bottom: 5px !important;
+        }
+        .sticky.header-1 {
+          padding-top: 0px !important;
+          padding-bottom: 0px !important;
+        }
+        .header-main {
+          min-height: 60px;
+        }
+        /* Reduce logo size slightly to fit thinner navbar */
+        .header-1 .logo img {
+          max-height: 40px !important;
+          width: auto;
+        }
+        /* Reduce apply button padding */
+        .header-1 .theme-btn .btn_inner {
+          padding: 10px 20px 10px 45px !important;
+        }
+        .header-1 .theme-btn .btn_inner .btn_icon {
+          width: 34px !important;
+          height: 34px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          bottom: auto !important;
+          left: 4px !important;
+        }
+        /* Make sure mobile button also looks perfect */
+        .offcanvas__contact .theme-btn .btn_icon {
+          width: 34px !important;
+          height: 34px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          bottom: auto !important;
+          left: 4px !important;
+        }
+        /* Reduce search/hamburger toggler height */
+        .header-1 .header-right .search-toggler,
+        .header-1 .header-right .sidebar__toggle {
+          width: 40px !important;
+          height: 40px !important;
+          line-height: 40px !important;
+        }
       `}</style>
       <div className="fix-area">
         <div className={`offcanvas__info ${offcanvasOpen ? 'info-open' : ''}`}>
@@ -141,13 +185,9 @@ export default function Navbar() {
                 <Link to="/apply-now" className="theme-btn" onClick={() => setOffcanvasOpen(false)}>
                   <div className="btn_inner">
                     <div className="btn_icon">
-                      <span style={{ backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute' }}>
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
+                      <span>
+                        <i className="fa-solid fa-check" style={{ fontSize: 16 }} />
+                        <i className="fa-solid fa-check" style={{ fontSize: 16 }} />
                       </span>
                     </div>
                     <div className="btn_text"><span>Apply Now</span></div>
@@ -205,13 +245,9 @@ export default function Navbar() {
                 <Link to="/apply-now" className="theme-btn d-none d-lg-block" style={{ marginRight: '20px' }}>
                   <div className="btn_inner">
                     <div className="btn_icon">
-                      <span style={{ backgroundColor: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute' }}>
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
+                      <span>
+                        <i className="fa-solid fa-check" style={{ fontSize: 16 }} />
+                        <i className="fa-solid fa-check" style={{ fontSize: 16 }} />
                       </span>
                     </div>
                     <div className="btn_text"><span>Apply Now</span></div>
