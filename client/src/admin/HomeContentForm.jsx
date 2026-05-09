@@ -464,19 +464,19 @@ export default function HomeContentForm() {
                 <CardDescription>Update headline copy for the "Reason to Choose Us" section.</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
+                <div className="space-y-1">
+                  <Label>Eyebrow</Label>
+                  <Input value={form.reasonSection.eyebrow} onChange={(e) => handleSectionChange('reasonSection', 'eyebrow', e.target.value)} />
+                </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="space-y-1">
-                    <Label>Eyebrow</Label>
-                    <Input value={form.reasonSection.eyebrow} onChange={(e) => handleSectionChange('reasonSection', 'eyebrow', e.target.value)} />
+                    <Label>Title</Label>
+                    <Input value={form.reasonSection.title} onChange={(e) => handleSectionChange('reasonSection', 'title', e.target.value)} />
                   </div>
                   <div className="space-y-1">
                     <Label>Title Highlight</Label>
                     <Input value={form.reasonSection.titleHighlight} onChange={(e) => handleSectionChange('reasonSection', 'titleHighlight', e.target.value)} />
                   </div>
-                </div>
-                <div className="space-y-1">
-                  <Label>Title</Label>
-                  <Input value={form.reasonSection.title} onChange={(e) => handleSectionChange('reasonSection', 'title', e.target.value)} />
                 </div>
                 <div className="space-y-1">
                   <Label>Description</Label>
@@ -548,19 +548,19 @@ export default function HomeContentForm() {
                 <CardDescription>Update the services intro copy shown on the homepage.</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
+                <div className="space-y-1">
+                  <Label>Eyebrow</Label>
+                  <Input value={form.servicesSection.eyebrow} onChange={(e) => handleSectionChange('servicesSection', 'eyebrow', e.target.value)} />
+                </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="space-y-1">
-                    <Label>Eyebrow</Label>
-                    <Input value={form.servicesSection.eyebrow} onChange={(e) => handleSectionChange('servicesSection', 'eyebrow', e.target.value)} />
+                    <Label>Title</Label>
+                    <Input value={form.servicesSection.title} onChange={(e) => handleSectionChange('servicesSection', 'title', e.target.value)} />
                   </div>
                   <div className="space-y-1">
                     <Label>Title Highlight</Label>
                     <Input value={form.servicesSection.titleHighlight} onChange={(e) => handleSectionChange('servicesSection', 'titleHighlight', e.target.value)} />
                   </div>
-                </div>
-                <div className="space-y-1">
-                  <Label>Title</Label>
-                  <Input value={form.servicesSection.title} onChange={(e) => handleSectionChange('servicesSection', 'title', e.target.value)} />
                 </div>
               </CardContent>
             </Card>
@@ -669,19 +669,19 @@ export default function HomeContentForm() {
                 <CardDescription>Update the testimonials headline and subtext.</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
+                <div className="space-y-1">
+                  <Label>Eyebrow</Label>
+                  <Input value={form.testimonialsSection.eyebrow} onChange={(e) => handleSectionChange('testimonialsSection', 'eyebrow', e.target.value)} />
+                </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="space-y-1">
-                    <Label>Eyebrow</Label>
-                    <Input value={form.testimonialsSection.eyebrow} onChange={(e) => handleSectionChange('testimonialsSection', 'eyebrow', e.target.value)} />
+                    <Label>Title</Label>
+                    <Input value={form.testimonialsSection.title} onChange={(e) => handleSectionChange('testimonialsSection', 'title', e.target.value)} />
                   </div>
                   <div className="space-y-1">
                     <Label>Title Highlight</Label>
                     <Input value={form.testimonialsSection.titleHighlight} onChange={(e) => handleSectionChange('testimonialsSection', 'titleHighlight', e.target.value)} />
                   </div>
-                </div>
-                <div className="space-y-1">
-                  <Label>Title</Label>
-                  <Input value={form.testimonialsSection.title} onChange={(e) => handleSectionChange('testimonialsSection', 'title', e.target.value)} />
                 </div>
               </CardContent>
             </Card>
