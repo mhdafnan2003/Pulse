@@ -1,9 +1,9 @@
 @charset "UTF-8";
 /*======================================================================================
-Theme Name: Brevon 
+Theme Name: pulse 
 Author: Gramentheme
 Author URI: https://themeforest.net/user/Gramentheme/portfolio
-Description: Brevon - Multipurpose Business HTML Template
+Description: pulse - Multipurpose Business HTML Template
 Service Html Template 
 Version: 1.0.0
 =======================================================================================*/
@@ -4725,7 +4725,7 @@ span {
   }
 }
 
-.hero-1 .brevon-text {
+.hero-1 .pulse-text {
   position: absolute;
   right: 0;
   opacity: 0.2;
@@ -4733,7 +4733,7 @@ span {
 }
 
 @media (max-width: 1199px) {
-  .hero-1 .brevon-text {
+  .hero-1 .pulse-text {
     display: none;
   }
 }
