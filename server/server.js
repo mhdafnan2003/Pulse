@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Serve existing Pulse static assets (images used in slides)
-app.use('/assets', express.static(path.join(__dirname, '../assets')));
+app.use('/assets', express.static(path.join(__dirname, '../client/public/assets')));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
