@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
+import { Label } from "../components/ui/label";
 import { Separator } from "../components/ui/separator";
 
 const STATUS_OPTIONS = ["new", "in-review", "approved", "rejected"];
@@ -51,16 +52,39 @@ export default function ApplicationsManager() {
     return "default";
   };
 
+  // Returns YYYY-MM-DD in local timezone (toISOString uses UTC which can give wrong date in IST etc.)
+  const localDateStr = (date = new Date()) => {
+    const d = new Date(date);
+    return [
+      d.getFullYear(),
+      String(d.getMonth() + 1).padStart(2, '0'),
+      String(d.getDate()).padStart(2, '0'),
+    ].join('-');
+  };
+
+  const [searchDate, setSearchDate] = useState("");
+  const [searchStatus, setSearchStatus] = useState("all");
+
   const filteredApplications = applications.filter((app) => {
+    // Search query filter
     const query = searchQuery.toLowerCase();
-    if (!query) return true;
-    
-    return (
+    const matchesQuery = !query || 
       (app.applicantName || "").toLowerCase().includes(query) ||
       (app.applicantEmail || "").toLowerCase().includes(query) ||
       (app.applicantPhone || "").toLowerCase().includes(query) ||
-      (app.status || "").toLowerCase().includes(query)
-    );
+      (app.status || "").toLowerCase().includes(query);
+
+    // Date filter
+    let matchesDate = true;
+    if (searchDate && app.createdAt) {
+      const appDate = localDateStr(new Date(app.createdAt));
+      matchesDate = appDate === searchDate;
+    }
+
+    // Status filter
+    const matchesStatus = searchStatus === "all" || app.status === searchStatus;
+
+    return matchesQuery && matchesDate && matchesStatus;
   });
 
   const toggleExpand = (applicationId) => {
@@ -129,21 +153,62 @@ export default function ApplicationsManager() {
 
       <Card className="border-slate-200">
         <CardHeader className="space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
               <CardTitle className="text-base">Application submissions</CardTitle>
               <CardDescription>Latest form submissions from the Apply Now page.</CardDescription>
             </div>
-            <div className="relative w-full sm:w-72">
-              <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
-              <input
-                type="text"
-                placeholder="Search by name, email, phone, or status..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-9 pl-9 pr-3 rounded-md border border-slate-200 bg-white text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none"
-                style={{ color: '#0f172a' }}
-              />
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="relative w-full sm:w-auto">
+                <Label className="text-[10px] uppercase text-slate-400 mb-1 block font-bold">Filter by Date</Label>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="date"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                    className="h-9 px-3 rounded-md border border-slate-200 bg-white text-sm outline-none focus:ring-2 focus:ring-slate-900"
+                    style={{ color: '#0f172a' }}
+                  />
+                  {searchDate && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchDate('')}
+                      title="Clear date filter"
+                      className="h-9 w-9 flex items-center justify-center rounded-md border border-slate-200 bg-white text-slate-400 hover:text-slate-700 hover:border-slate-400 transition-colors flex-shrink-0"
+                    >
+                      <i className="fa-solid fa-xmark text-xs" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="w-full sm:w-36">
+                <Label className="text-[10px] uppercase text-slate-400 mb-1 block font-bold">Status</Label>
+                <select
+                  value={searchStatus}
+                  onChange={(e) => setSearchStatus(e.target.value)}
+                  className="w-full h-9 px-3 rounded-md border border-slate-200 bg-white text-sm outline-none focus:ring-2 focus:ring-slate-900"
+                  style={{ color: '#0f172a' }}
+                >
+                  <option value="all">All Status</option>
+                  {STATUS_OPTIONS.map(s => (
+                    <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="relative w-full sm:w-56">
+                <Label className="text-[10px] uppercase text-slate-400 mb-1 block font-bold">Search</Label>
+                <div className="relative">
+                  <i className="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
+                  <input
+                    type="text"
+                    placeholder="Name, email..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full h-9 pl-9 pr-3 rounded-md border border-slate-200 bg-white text-sm placeholder:text-slate-400 focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none"
+                    style={{ color: '#0f172a' }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -158,7 +223,7 @@ export default function ApplicationsManager() {
             <p className="text-sm text-slate-500 py-8 text-center">No applications match your search.</p>
           ) : (
             <div className="space-y-3">
-              {searchQuery && (
+              {(searchQuery || searchDate !== "" || searchStatus !== 'all') && (
                 <p className="text-xs text-slate-500">
                   Showing {filteredApplications.length} of {applications.length} application{applications.length !== 1 ? 's' : ''}
                 </p>

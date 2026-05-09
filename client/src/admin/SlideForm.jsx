@@ -69,7 +69,7 @@ export default function SlideForm() {
       } else {
         await slidesApi.create(form);
       }
-      navigate('/admin/slides');
+      navigate('/admin/home-content');
     } catch (err) {
       setError(err.response?.data?.message || 'Save failed');
     } finally {
@@ -166,7 +166,7 @@ export default function SlideForm() {
           <button type="submit" style={styles.saveBtn} disabled={saving || uploading}>
             {saving ? 'Saving…' : isEdit ? 'Update Slide' : 'Create Slide'}
           </button>
-          <button type="button" style={styles.cancelBtn} onClick={() => navigate('/admin/slides')}>
+          <button type="button" style={styles.cancelBtn} onClick={() => navigate('/admin/home-content')}>
             Cancel
           </button>
         </div>

@@ -3,10 +3,49 @@
 .header-1 .header-main .logo img.d-none.d-md-block,
 .header-1 .logo img.d-block.d-md-none,
 .header-1 .header-main .logo img.d-block.d-md-none {
-    max-width: 250px !important;
+    max-width: 360px !important;
+    max-height: 100px !important;
     width: auto !important;
     height: auto !important;
     min-width: 0 !important;
+}
+
+/* Offcanvas sidebar background for better logo contrast */
+.offcanvas__info {
+    background: #0b1320 !important;
+    border-left: 2px solid #0b1320 !important;
+}
+
+.offcanvas__info .offcanvas__wrapper .offcanvas__content .text,
+.offcanvas__info .offcanvas__wrapper .offcanvas__contact h4,
+.offcanvas__info .offcanvas__wrapper .offcanvas__contact ul li a,
+.offcanvas__info .mean-nav a {
+    color: #f8fafc !important;
+}
+
+.offcanvas__info .offcanvas__wrapper .social-icon a {
+    color: #f8fafc;
+    border-color: rgba(248, 250, 252, 0.2);
+}
+
+@media (max-width: 575px) {
+    .offcanvas__wrapper .theme-btn {
+        font-size: 14px;
+        padding: 4px;
+        border-radius: 40px;
+    }
+
+    .offcanvas__wrapper .theme-btn .btn_inner {
+        padding: 10px 18px 10px 44px;
+    }
+
+    .offcanvas__wrapper .theme-btn .btn_inner::before {
+        width: 36px;
+    }
+
+    .offcanvas__wrapper .theme-btn .btn_inner .btn_icon {
+        min-width: 36px;
+    }
 }
 
 
@@ -1416,6 +1455,10 @@ body {
     height: 60px;
 }
 
+.footer-logo img {
+    width: 150px;
+}
+
 @media (max-width: 767px) {
     .offcanvas__logo img.d-none.d-md-block,
     .color-palate .palate-logo img,
@@ -1438,6 +1481,10 @@ body {
     .about-content .about-description p {
         font-size: 15px !important;
         line-height: 1.7 !important;
+    }
+
+    .footer-logo img {
+        width: 130px;
     }
 }
 

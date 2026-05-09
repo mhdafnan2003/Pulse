@@ -119,13 +119,21 @@ export default function ApplyNowContentForm() {
   const updateFieldItem = (index, key, value) => {
     setForm((prev) => {
       const fields = [...(prev.basicBlock?.fields || [])];
-      fields[index] = { ...fields[index], [key]: value };
+      if (key === 'label') {
+        fields[index] = { 
+          ...fields[index], 
+          label: value, 
+          key: value, 
+          placeholder: value 
+        };
+      } else {
+        fields[index] = { ...fields[index], [key]: value };
+      }
       return { ...prev, basicBlock: { ...(prev.basicBlock || {}), fields } };
     });
   };
 
   const addFieldItem = () => {
-    const newIndex = form.basicBlock?.fields?.length || 0;
     focusNewFieldRef.current = true;
     setForm((prev) => ({
       ...prev,
@@ -134,7 +142,7 @@ export default function ApplyNowContentForm() {
         fields: [...(prev.basicBlock?.fields || []), { ...emptyField }],
       },
     }));
-    setFieldOpenItems((prev) => Array.from(new Set([...prev, `field-${newIndex}`])));
+    setFieldOpenItems((prev) => Array.from(new Set([...prev, 'field-0'])));
   };
 
   const removeFieldItem = (index) => {
@@ -151,7 +159,15 @@ export default function ApplyNowContentForm() {
   const updateDocItem = (block, index, key, value) => {
     setForm((prev) => {
       const docs = [...(prev[block]?.documents || [])];
-      docs[index] = { ...docs[index], [key]: value };
+      if (key === 'label') {
+        docs[index] = { 
+          ...docs[index], 
+          label: value, 
+          key: value 
+        };
+      } else {
+        docs[index] = { ...docs[index], [key]: value };
+      }
       return { ...prev, [block]: { ...(prev[block] || {}), documents: docs } };
     });
   };
@@ -162,7 +178,6 @@ export default function ApplyNowContentForm() {
       additionalDocsBlock: { ref: lastAddedAddDocRef, focus: focusNewAddDocRef, items: addDocOpenItems, setItems: setAddDocOpenItems, prefix: 'add-doc' },
     };
     const config = refMap[block];
-    const newIndex = form[block]?.documents?.length || 0;
     config.focus.current = true;
     setForm((prev) => ({
       ...prev,
@@ -171,7 +186,7 @@ export default function ApplyNowContentForm() {
         documents: [...(prev[block]?.documents || []), { ...emptyDoc }],
       },
     }));
-    config.setItems((prev) => Array.from(new Set([...prev, `${config.prefix}-${newIndex}`])));
+    config.setItems((prev) => Array.from(new Set([...prev, `${config.prefix}-0`])));
   };
 
   const removeDocItem = (block, index) => {
@@ -253,47 +268,33 @@ export default function ApplyNowContentForm() {
                 onValueChange={setFieldOpenItems}
                 className="space-y-2"
               >
-                {fields.map((field, i) => {
-                  const isLastAdded = i === fields.length - 1;
+                {[...fields].reverse().map((field, i) => {
+                  const isNew = i === 0 && focusNewFieldRef.current;
+                  const originalIndex = fields.length - 1 - i;
                   return (
-                    <AccordionItem key={`field-${i}`} value={`field-${i}`}>
+                    <AccordionItem key={`field-${originalIndex}`} value={`field-${i}`}>
                       <AccordionTrigger>
-                        <span className="text-sm">Field {i + 1}{field.label ? ` · ${field.label}` : ''}</span>
+                        <span className="text-sm">Field {fields.length - i}{field.label ? ` · ${field.label}` : ''}</span>
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="grid gap-4">
                           <div className="grid gap-3 sm:grid-cols-2">
                             <div className="space-y-1">
-                              <Label>Key</Label>
-                              <Input
-                                ref={isLastAdded ? lastAddedFieldRef : null}
-                                value={field.key}
-                                onChange={(e) => updateFieldItem(i, 'key', e.target.value)}
-                                placeholder="e.g. fullName"
-                              />
-                            </div>
-                            <div className="space-y-1">
                               <Label>Label</Label>
                               <Input
+                                ref={isNew ? lastAddedFieldRef : null}
                                 value={field.label}
-                                onChange={(e) => updateFieldItem(i, 'label', e.target.value)}
+                                onChange={(e) => updateFieldItem(originalIndex, 'label', e.target.value)}
                                 placeholder="e.g. Full Name"
                               />
-                            </div>
-                            <div className="space-y-1">
-                              <Label>Placeholder</Label>
-                              <Input
-                                value={field.placeholder || ''}
-                                onChange={(e) => updateFieldItem(i, 'placeholder', e.target.value)}
-                                placeholder="e.g. Jane Doe"
-                              />
+                              <p className="text-[10px] text-slate-400">Automatically syncs key and placeholder with label.</p>
                             </div>
                             <div className="space-y-1">
                               <Label>Type</Label>
                               <select
                                 className="h-9 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-slate-900 focus:ring-2 focus:ring-slate-900 outline-none"
                                 value={field.type || 'text'}
-                                onChange={(e) => updateFieldItem(i, 'type', e.target.value)}
+                                onChange={(e) => updateFieldItem(originalIndex, 'type', e.target.value)}
                               >
                                 <option value="text">Text</option>
                                 <option value="email">Email</option>
@@ -305,16 +306,16 @@ export default function ApplyNowContentForm() {
 
                           <div className="flex items-center gap-2">
                             <input
-                              id={`field-req-${i}`}
+                              id={`field-req-${originalIndex}`}
                               type="checkbox"
                               className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
                               checked={Boolean(field.required)}
-                              onChange={(e) => updateFieldItem(i, 'required', e.target.checked)}
+                              onChange={(e) => updateFieldItem(originalIndex, 'required', e.target.checked)}
                             />
-                            <Label htmlFor={`field-req-${i}`} className="text-sm cursor-pointer">Required</Label>
+                            <Label htmlFor={`field-req-${originalIndex}`} className="text-sm cursor-pointer">Required</Label>
                           </div>
 
-                          <Button type="button" size="sm" variant="destructive" onClick={() => removeFieldItem(i)}>
+                          <Button type="button" size="sm" variant="destructive" onClick={() => removeFieldItem(originalIndex)}>
                             Remove Field
                           </Button>
                         </div>
@@ -346,47 +347,41 @@ export default function ApplyNowContentForm() {
                 onValueChange={setReqDocOpenItems}
                 className="space-y-2"
               >
-                {reqDocs.map((doc, i) => {
-                  const isLastAdded = i === reqDocs.length - 1;
+                {[...reqDocs].reverse().map((doc, i) => {
+                  const isNew = i === 0 && focusNewReqDocRef.current;
+                  const originalIndex = reqDocs.length - 1 - i;
                   return (
-                    <AccordionItem key={`req-doc-${i}`} value={`req-doc-${i}`}>
+                    <AccordionItem key={`req-doc-${originalIndex}`} value={`req-doc-${i}`}>
                       <AccordionTrigger>
-                        <span className="text-sm">Doc {i + 1}{doc.label ? ` · ${doc.label}` : ''}</span>
+                        <span className="text-sm">Doc {reqDocs.length - i}{doc.label ? ` · ${doc.label}` : ''}</span>
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="grid gap-4">
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            <div className="space-y-1">
-                              <Label>Key</Label>
-                              <Input
-                                ref={isLastAdded ? lastAddedReqDocRef : null}
-                                value={doc.key}
-                                onChange={(e) => updateDocItem('requiredDocsBlock', i, 'key', e.target.value)}
-                                placeholder="e.g. passport"
-                              />
-                            </div>
+                          <div className="grid gap-3">
                             <div className="space-y-1">
                               <Label>Label</Label>
                               <Input
+                                ref={isNew ? lastAddedReqDocRef : null}
                                 value={doc.label}
-                                onChange={(e) => updateDocItem('requiredDocsBlock', i, 'label', e.target.value)}
+                                onChange={(e) => updateDocItem('requiredDocsBlock', originalIndex, 'label', e.target.value)}
                                 placeholder="e.g. Passport"
                               />
+                              <p className="text-[10px] text-slate-400">Automatically syncs key with label.</p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-2">
                             <input
-                              id={`req-doc-check-${i}`}
+                              id={`req-doc-check-${originalIndex}`}
                               type="checkbox"
                               className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
                               checked={Boolean(doc.required)}
-                              onChange={(e) => updateDocItem('requiredDocsBlock', i, 'required', e.target.checked)}
+                              onChange={(e) => updateDocItem('requiredDocsBlock', originalIndex, 'required', e.target.checked)}
                             />
-                            <Label htmlFor={`req-doc-check-${i}`} className="text-sm cursor-pointer">Required</Label>
+                            <Label htmlFor={`req-doc-check-${originalIndex}`} className="text-sm cursor-pointer">Required</Label>
                           </div>
 
-                          <Button type="button" size="sm" variant="destructive" onClick={() => removeDocItem('requiredDocsBlock', i)}>
+                          <Button type="button" size="sm" variant="destructive" onClick={() => removeDocItem('requiredDocsBlock', originalIndex)}>
                             Remove Document
                           </Button>
                         </div>
@@ -418,36 +413,30 @@ export default function ApplyNowContentForm() {
                 onValueChange={setAddDocOpenItems}
                 className="space-y-2"
               >
-                {addDocs.map((doc, i) => {
-                  const isLastAdded = i === addDocs.length - 1;
+                {[...addDocs].reverse().map((doc, i) => {
+                  const isNew = i === 0 && focusNewAddDocRef.current;
+                  const originalIndex = addDocs.length - 1 - i;
                   return (
-                    <AccordionItem key={`add-doc-${i}`} value={`add-doc-${i}`}>
+                    <AccordionItem key={`add-doc-${originalIndex}`} value={`add-doc-${i}`}>
                       <AccordionTrigger>
-                        <span className="text-sm">Doc {i + 1}{doc.label ? ` · ${doc.label}` : ''}</span>
+                        <span className="text-sm">Doc {addDocs.length - i}{doc.label ? ` · ${doc.label}` : ''}</span>
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="grid gap-4">
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            <div className="space-y-1">
-                              <Label>Key</Label>
-                              <Input
-                                ref={isLastAdded ? lastAddedAddDocRef : null}
-                                value={doc.key}
-                                onChange={(e) => updateDocItem('additionalDocsBlock', i, 'key', e.target.value)}
-                                placeholder="e.g. drivingLicence"
-                              />
-                            </div>
+                          <div className="grid gap-3">
                             <div className="space-y-1">
                               <Label>Label</Label>
                               <Input
+                                ref={isNew ? lastAddedAddDocRef : null}
                                 value={doc.label}
-                                onChange={(e) => updateDocItem('additionalDocsBlock', i, 'label', e.target.value)}
+                                onChange={(e) => updateDocItem('additionalDocsBlock', originalIndex, 'label', e.target.value)}
                                 placeholder="e.g. Driving Licence"
                               />
+                              <p className="text-[10px] text-slate-400">Automatically syncs key with label.</p>
                             </div>
                           </div>
 
-                          <Button type="button" size="sm" variant="destructive" onClick={() => removeDocItem('additionalDocsBlock', i)}>
+                          <Button type="button" size="sm" variant="destructive" onClick={() => removeDocItem('additionalDocsBlock', originalIndex)}>
                             Remove Document
                           </Button>
                         </div>

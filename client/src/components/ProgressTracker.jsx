@@ -114,29 +114,6 @@ export default function ProgressTracker({ basicFields, requiredDocs, additionalD
           </p>
         </div>
       </div>
-
-      {/* Dedicated Support Card */}
-      <div className="rounded-lg border border-slate-200 bg-white p-6">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-            <i className="fa-solid fa-headset text-blue-600"></i>
-          </div>
-          <div>
-            <h4 className="text-sm font-semibold text-slate-900 mb-1">Dedicated Support</h4>
-            <p className="text-xs text-slate-600 leading-relaxed mb-3">
-              Need help with your documents? Our agents are here to assist 24/7
-            </p>
-            <a 
-              href="https://wa.me/447956273533?text=Hi!%20I%20need%20help%20with%20my%20application%20documents."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs font-medium text-blue-600 hover:text-blue-700 underline inline-block"
-            >
-              Chat with an Agent
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

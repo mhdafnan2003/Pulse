@@ -78,10 +78,9 @@ export default function App() {
             }
           >
             <Route index element={<Navigate to="/admin/home-content" replace />} />
-            <Route path="slides" element={<SlideManager />} />
+            <Route path="home-content" element={<HomeContentForm />} />
             <Route path="slides/new" element={<SlideForm />} />
             <Route path="slides/:id/edit" element={<SlideForm />} />
-            <Route path="home-content" element={<HomeContentForm />} />
             <Route path="service-content" element={<ServicePageContentForm />} />
             <Route path="contact-content" element={<ContactContentForm />} />
             <Route path="about-content" element={<AboutContentForm />} />

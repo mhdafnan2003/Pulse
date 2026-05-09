@@ -63,24 +63,7 @@ export default function SiteChrome() {
         </div>
       )}
 
-      <div className="color-palate">
-        <button className="color-trigger">
-          <i className="fa-solid fa-gear"></i>
-        </button>
-        <button className="close-color-trigger">
-          <i className="fa-solid fa-xmark"></i>
-        </button>
-        <div className="color-palate-inner">
-          <a href="/" className="palate-logo mb-4 d-block">
-            <img src="/assets/img/logo-main.png" alt="Pulse Creative & Consulting Ltd" />
-          </a>
-          <h6>Dark Verion</h6>
-          <ul className="dark-version box-version option-box">
-            <li className="box">Dark Mode</li>
-            <li>Light Mode</li>
-          </ul>
-        </div>
-      </div>
+
 
       <button id="back-top" className="back-to-top">
         <i className="fa-regular fa-arrow-up"></i>
