@@ -4,11 +4,12 @@ import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { Label } from "../components/ui/label";
 import { Separator } from "../components/ui/separator";
+import { applicationsApi } from "../api";
 
 const STATUS_OPTIONS = ["new", "in-review", "approved", "rejected"];
 
 export default function ApplicationsManager() {
-  const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "";
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -23,12 +24,9 @@ export default function ApplicationsManager() {
     setLoading(true);
     setError("");
 
-    fetch(`${apiBaseUrl}/api/applications`)
+    applicationsApi.getAll()
       .then((response) => {
-        if (!response.ok) throw new Error("Failed to load applications");
-        return response.json();
-      })
-      .then((data) => {
+        const data = response.data;
         if (!isMounted) return;
         setApplications(Array.isArray(data) ? data : []);
       })
@@ -95,16 +93,9 @@ export default function ApplicationsManager() {
   const handleStatusUpdate = (applicationId) => {
     setUpdating(true);
 
-    fetch(`${apiBaseUrl}/api/applications/${applicationId}/status`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: selectedStatus }),
-    })
+    applicationsApi.updateStatus(applicationId, selectedStatus)
       .then((response) => {
-        if (!response.ok) throw new Error("Failed to update status");
-        return response.json();
-      })
-      .then((updated) => {
+        const updated = response.data;
         setApplications((prev) =>
           prev.map((item) => (item._id === updated._id ? updated : item))
         );
@@ -123,13 +114,7 @@ export default function ApplicationsManager() {
     }
 
     setDeleting(applicationId);
-    fetch(`${apiBaseUrl}/api/applications/${applicationId}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to delete application");
-        return response.json();
-      })
+    applicationsApi.remove(applicationId)
       .then(() => {
         setApplications((prev) => prev.filter((app) => app._id !== applicationId));
         if (expandedId === applicationId) {

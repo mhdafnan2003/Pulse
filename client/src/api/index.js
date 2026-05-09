@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const api = axios.create({ baseURL: '/api' });
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || '/api'
+});
 
 // Attach token for admin requests
 api.interceptors.request.use((config) => {
@@ -59,4 +61,11 @@ export const uploadApi = {
 
 export const authApi = {
   login: (username, password) => api.post('/auth/login', { username, password }),
+};
+
+export const applicationsApi = {
+  submit: (data) => api.post('/applications', data),
+  getAll: () => api.get('/applications'),
+  updateStatus: (id, status) => api.patch(`/applications/${id}/status`, { status }),
+  remove: (id) => api.delete(`/applications/${id}`),
 };

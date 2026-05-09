@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import ProgressTracker from "../components/ProgressTracker";
 import ModernFileUpload from "../components/ModernFileUpload";
 import { useApplyNowContent } from "../context/ApplyNowContentContext";
+import { applicationsApi } from "../api";
 
 const MAX_FILE_SIZE_MB = 10;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const ACCEPTED_TYPES = ["application/pdf", "image/png", "image/jpeg"];
 
 export default function ApplyNowPage() {
-  const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const apiBaseUrl = import.meta.env.VITE_API_URL || "";
   const { applyNowContent, fetchApplyNowContent } = useApplyNowContent();
   const inputRefs = useRef({});
   const formRef = useRef(null);
@@ -170,20 +171,9 @@ export default function ApplyNowPage() {
     setIsSubmitting(true);
     setSubmitMessage("");
 
-    fetch(`${apiBaseUrl}/api/applications`, {
-      method: "POST",
-      body: formPayload,
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          const payload = await response.json().catch(() => ({}));
-          const apiErrors = payload?.errors || {};
-          setErrors((prev) => ({ ...prev, ...apiErrors }));
-          throw new Error(payload?.message || "Submission failed");
-        }
-        return response.json();
-      })
-      .then(() => {
+    applicationsApi.submit(formPayload)
+      .then((response) => {
+        const data = response.data;
         setSubmitMessage("Application submitted. We will contact you shortly.");
 
         // Build WhatsApp message dynamically
